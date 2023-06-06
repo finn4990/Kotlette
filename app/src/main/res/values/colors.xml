@@ -7,4 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="Tavolozza1">#BCE1DE</color>
+    <color name="Tavolozza2">#0777A8</color>
+    <color name="Tavolozza3">#253E68</color>
+    <color name="Tavolozza4">#32A2A5</color>
+    <color name="Tavolozza5">#CBF4ED</color>
 </resources>
