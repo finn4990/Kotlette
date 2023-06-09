@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileFragment"
+    android:background="@color/Tavolozza4">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="155dp"
+        android:layout_height="155dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="240dp"
+        app:cardCornerRadius="250dp"
+        app:cardBackgroundColor="@color/white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/avatars"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textViewU"
+        android:layout_width="350dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="80dp"
+        android:hint="@string/Username"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewE"
+        android:layout_width="350dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:hint="@string/Email"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewM"
+        android:layout_width="350dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="-40dp"
+        android:hint="@string/Method"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/buttonPass"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:text="@string/ChangePass"
+        android:layout_marginTop="140dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@drawable/changebutton" />
+
+    <Button
+        android:id="@+id/buttonAvatar"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:text="@string/ChangeAv"
+        android:layout_marginTop="220dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@drawable/changebutton" />
+
+</FrameLayout>

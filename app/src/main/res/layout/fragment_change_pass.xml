@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChangePassFragment"
+    android:background="@color/Tavolozza4">
+
+    <EditText
+        android:id="@+id/editTextCurrentPsw"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/OldPsw"
+        android:layout_gravity="center"
+        android:layout_marginBottom="300dp"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/editTextNewPsw"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/NewPsw"
+        android:inputType="textPassword"
+        android:layout_gravity="center"
+        android:layout_marginBottom="220dp"/>
+
+    <EditText
+        android:id="@+id/editText2psw"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/ConfirmPsw"
+        android:inputType="textPassword"
+        android:layout_gravity="center"
+        android:layout_marginBottom="140dp"/>
+
+    <Button
+        android:id="@+id/buttonChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ChangePass"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@drawable/changebutton" />
+
+</FrameLayout>
