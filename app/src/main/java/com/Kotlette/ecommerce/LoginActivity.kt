@@ -16,8 +16,8 @@ class LoginActivity : AppCompatActivity() {
             val fragmentManager = supportFragmentManager
             val fragmentTransaction = fragmentManager.beginTransaction()
 
-            val myFragment = LoginFragment()
-            fragmentTransaction.add(R.id.fragmentContainerView, LoginFragment())
+            val myFragment1 = LoginFragment()
+            fragmentTransaction.add(R.id.fragmentContainerView, myFragment1)
             fragmentTransaction.addToBackStack("fragment login")
             fragmentTransaction.commit()
             binding.Cl1?.visibility = View.INVISIBLE
@@ -28,7 +28,7 @@ class LoginActivity : AppCompatActivity() {
             val fragmentTransaction = fragmentManager.beginTransaction()
 
             val myFragment = RegisterFragment()
-            fragmentTransaction.add(R.id.fragmentContainerView, RegisterFragment())
+            fragmentTransaction.add(R.id.fragmentContainerView, myFragment)
             fragmentTransaction.addToBackStack("fragment register")
             fragmentTransaction.commit()
             binding.Cl1?.visibility = View.INVISIBLE
