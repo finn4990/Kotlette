@@ -15,4 +15,7 @@
     <string name="NewPsw">New password</string>
     <string name="OldPsw">Current password</string>
     <string name="ConfirmPsw">Confirm password</string>
+    <string name="Welcome">WELCOME!</string>
+    <string name="LogAcc">Enter into your account</string>
+    <string name="RegAcc">If you don\'t have one, register now!</string>
 </resources>
