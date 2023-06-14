@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.account -> replaceFragment(ProfileFragment())
-            R.id.home -> replaceFragment(HomeFragment())
+            R.id.home -> replaceFragment(TransactionFragment())
             R.id.cart -> replaceFragment(CartFragment())
         }
         return super.onOptionsItemSelected(item)
