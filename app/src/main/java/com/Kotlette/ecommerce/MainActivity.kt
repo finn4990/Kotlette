@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.bottom_nav_menu, menu)
+        menuInflater.inflate(R.menu.nav_menu, menu)
         return true
     }
 
@@ -36,5 +36,10 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.frame_layout,fragment)
         fragmentTransaction.addToBackStack("fragment register")
         fragmentTransaction.commit()
+    }
+
+    override fun onBackPressed() {
+        val fragmentManager = supportFragmentManager
+        fragmentManager.popBackStack()
     }
 }
