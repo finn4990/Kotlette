@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.Kotlette.ecommerce.databinding.FragmentProfileBinding
 
 
 class ProfileFragment : Fragment() {
@@ -18,8 +19,20 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        val binding = FragmentProfileBinding.inflate(layoutInflater)
+        val view = binding.root
+
+        binding.buttonPass.setOnClickListener {
+            val fragmentManager = getActivity()?.supportFragmentManager
+            val fragmentTransaction = fragmentManager?.beginTransaction()
+
+            val myFragment = ChangePassFragment()
+            fragmentTransaction?.replace(R.id.frame_layout, myFragment)
+            fragmentTransaction?.addToBackStack("fragment ChangPass")
+            fragmentTransaction?.commit()
+
+        }
+        return view
     }
 
 

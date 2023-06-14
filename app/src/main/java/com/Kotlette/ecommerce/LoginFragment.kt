@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.Kotlette.ecommerce.databinding.FragmentLoginBinding
-import com.Kotlette.ecommerce.databinding.FragmentRegisterBinding
+import com.Kotlette.ecommerce.UserInstance
 
 
 class LoginFragment : Fragment() {
