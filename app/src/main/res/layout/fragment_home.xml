@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/prodottiPopolari"
+        android:id="@+id/popular_products"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -14,11 +14,13 @@
         android:text="Most Popular" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPopular"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/sale_products"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -28,11 +30,12 @@
         android:layout_marginTop="16dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewSale"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/all_products"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -42,6 +45,7 @@
         android:layout_marginTop="16dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewAll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>
