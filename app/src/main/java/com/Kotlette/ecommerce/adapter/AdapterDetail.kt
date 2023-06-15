@@ -3,6 +3,7 @@ package com.Kotlette.ecommerce.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
@@ -22,14 +23,14 @@ class AdapterDetail (private val detailList : ArrayList<ItemDetail>) :
 
     override fun onBindViewHolder(holder: ViewHolderDetail, position: Int) {
         val currentItem = detailList[position]
-        holder.userIcon.text = currentItem.userIcon
+        holder.userIcon.setImageResource(currentItem.userIcon)
         holder.comment.text = currentItem.comment
         holder.rating.text = "VOTO: " + currentItem.rating
     }
 
     class ViewHolderDetail(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val userIcon : TextView = itemView.findViewById(R.id.user_icon)
+        val userIcon : ImageView = itemView.findViewById(R.id.user_icon)
         val comment : TextView = itemView.findViewById(R.id.comment)
         val rating : TextView = itemView.findViewById(R.id.rating)
     }

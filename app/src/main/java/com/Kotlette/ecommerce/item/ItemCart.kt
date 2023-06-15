@@ -1,4 +1,4 @@
 package com.Kotlette.ecommerce.item
 
-class ItemCart (val iconProduct : String, val title : String) {
+class ItemCart (val iconProduct : Int, val title : String) {
 }
