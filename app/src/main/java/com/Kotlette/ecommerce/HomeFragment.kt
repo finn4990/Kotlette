@@ -13,11 +13,13 @@ import com.Kotlette.ecommerce.item.ItemHome
 class HomeFragment : Fragment() {
 
     private lateinit var adapter : AdapterHome
-    private lateinit var recyclerView : RecyclerView
+    private lateinit var recyclerViewPopular : RecyclerView
+    private lateinit var recyclerViewSale : RecyclerView
+    private lateinit var recyclerViewAll : RecyclerView
     private lateinit var homeArrayList : ArrayList<ItemHome>
 
     lateinit var title: Array<String>
-    lateinit var image: Array<String>
+    lateinit var image: Array<Int>
     lateinit var price: Array<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,12 +38,27 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataInitialize()
-        val layoutManager = LinearLayoutManager(context)
-        recyclerView = view.findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.setHasFixedSize(true)
+
+        //RecycleViewPopular
+        recyclerViewPopular = view.findViewById(R.id.recyclerViewPopular)
+        recyclerViewPopular.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewPopular.setHasFixedSize(true)
         adapter = AdapterHome(homeArrayList)
-        recyclerView.adapter = adapter
+        recyclerViewPopular.adapter = adapter
+
+        //RecycleViewSale
+        recyclerViewSale = view.findViewById(R.id.recyclerViewSale)
+        recyclerViewSale.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewSale.setHasFixedSize(true)
+        adapter = AdapterHome(homeArrayList)
+        recyclerViewSale.adapter = adapter
+
+        //RecycleViewAll
+        recyclerViewAll = view.findViewById(R.id.recyclerViewAll)
+        recyclerViewAll.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewAll.setHasFixedSize(true)
+        adapter = AdapterHome(homeArrayList)
+        recyclerViewAll.adapter = adapter
     }
 
     private fun dataInitialize() {
@@ -68,22 +85,22 @@ class HomeFragment : Fragment() {
         )
 
         image = arrayOf(
-            "05-05-2552",
-            "20-10-2532",
-            "22-05-2552",
-            "29-03-2082",
-            "10-01-2552",
-            "20-11-2852",
-            "31-11-2002",
-            "20-07-2002",
-            "05-05-2552",
-            "20-10-2532",
-            "22-05-2552",
-            "29-03-2082",
-            "10-01-2552",
-            "20-11-2852",
-            "31-11-2002",
-            "20-07-2002"
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24,
+            R.drawable.ic_baseline_home_24
         )
 
         price = arrayOf(

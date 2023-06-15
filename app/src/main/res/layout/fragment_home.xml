@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
@@ -17,6 +18,7 @@
         android:id="@+id/recyclerViewPopular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:reverseLayout="true"
         />
 
     <TextView
@@ -27,12 +29,13 @@
         android:textStyle="bold"
         android:textSize="16sp"
         android:text="Daily Sale"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="48dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewSale"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:reverseLayout="true" />
 
     <TextView
         android:id="@+id/all_products"
@@ -42,10 +45,12 @@
         android:textStyle="bold"
         android:textSize="16sp"
         android:text="All Products"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="48dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewAll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:reverseLayout="true" />
 </LinearLayout>

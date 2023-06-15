@@ -20,7 +20,7 @@
         <ImageView
             android:id="@+id/image_product"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="128dp"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView

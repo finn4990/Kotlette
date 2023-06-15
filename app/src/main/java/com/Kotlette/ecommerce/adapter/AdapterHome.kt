@@ -3,6 +3,7 @@ package com.Kotlette.ecommerce.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
@@ -23,14 +24,14 @@ class AdapterHome (private val homeList : ArrayList<ItemHome>) :
     override fun onBindViewHolder(holder: ViewHolderHome, position: Int) {
         val currentItem = homeList[position]
         holder.title.text = currentItem.title
-        holder.image.text = currentItem.image
+        holder.image.setImageResource(currentItem.image)
         holder.price.text = "Prezzo: " + currentItem.price
     }
 
     class ViewHolderHome(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val title : TextView = itemView.findViewById(R.id.title_product)
-        val image : TextView = itemView.findViewById(R.id.image_product)
+        val image : ImageView = itemView.findViewById(R.id.image_product)
         val price : TextView = itemView.findViewById(R.id.price_product)
     }
 }
