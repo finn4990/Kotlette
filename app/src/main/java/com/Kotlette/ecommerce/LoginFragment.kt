@@ -77,20 +77,11 @@ class LoginFragment : Fragment() {
 
     private fun loginUtente (email: String, password: String) {
 
-        val red = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("http://10.0.2.2:8000/webmobile/")
-            .build()
-            .create(UserAPI::class.java)
-
-
         Log.v("SELECT", "Step 2!")
         val query =
             "select * from utente where Email = '${email}' and Password = '${password}';"
 
-        val data = red.select(query)
-
-        data.enqueue(
+        ClientNetwork.retrofit.select(query).enqueue(
             object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful) {
