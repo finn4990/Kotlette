@@ -91,6 +91,8 @@ class LoginFragment : Fragment() {
                             openActivityMain()
                         } else {
                         }
+                    } else {
+                        Log.v("SELECT", "Merda 2!")
                     }
                 }
 

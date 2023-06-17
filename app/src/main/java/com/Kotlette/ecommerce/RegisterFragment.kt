@@ -3,12 +3,19 @@ package com.Kotlette.ecommerce
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.Kotlette.ecommerce.databinding.FragmentRegisterBinding
 import android.widget.Toast
+import com.Kotlette.ecommerce.clientweb.ClientNetwork
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegisterFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +57,8 @@ class RegisterFragment : Fragment() {
 
                 db.close()*/
 
-                openActivityLogin()
+                //openActivityLogin()
+                registerUtente(email, password, name, surname, payment, username)
                 Toast.makeText(requireContext(), "Ti sei registrato", Toast.LENGTH_SHORT).show()
             } else{
                 Toast.makeText(requireContext(), "Devi inserire tutti i campi", Toast.LENGTH_SHORT).show()
@@ -59,5 +67,30 @@ class RegisterFragment : Fragment() {
 
         return view
 
+    }
+
+    private fun registerUtente (email: String, password: String,
+                             name:String, surname: String,
+                             payment: String, username: String) {
+
+        Log.v("INSERT", "Step 2!")
+        val query = "INSERT INTO utente VALUES ('dudu', 'dd', 'cc', 'ff', 'aa', 'bb')"
+
+        ClientNetwork.retrofit.insert(query).enqueue(
+            object : Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if (response.isSuccessful) {
+                        Log.v("INSERT", "Step 3!")
+                    } else {
+                        Log.v("INSERT", "Merda 2!")
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.v("INSERT", "Una Merda!")
+
+                }
+            }
+        )
     }
 }
