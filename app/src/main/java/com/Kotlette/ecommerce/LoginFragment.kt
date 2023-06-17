@@ -3,19 +3,21 @@ package com.Kotlette.ecommerce
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.Kotlette.ecommerce.clientweb.ClientNetwork
+import com.Kotlette.ecommerce.clientweb.UserAPI
 import com.Kotlette.ecommerce.databinding.FragmentLoginBinding
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Url
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class LoginFragment : Fragment() {
@@ -74,11 +76,21 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginUtente (email: String, password: String) {
+
+        val red = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("http://10.0.2.2:8000/webmobile/")
+            .build()
+            .create(UserAPI::class.java)
+
+
         Log.v("SELECT", "Step 2!")
         val query =
             "select * from utente where Email = '${email}' and Password = '${password}';"
 
-        ClientNetwork.retrofit.select(query).enqueue(
+        val data = red.select(query)
+
+        data.enqueue(
             object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful) {
@@ -92,9 +104,7 @@ class LoginFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    /*
-                     * gestisci qui il fallimento della richiesta
-                     */
+                    Log.v("SELECT", "Una Merda!")
 
                 }
             }
