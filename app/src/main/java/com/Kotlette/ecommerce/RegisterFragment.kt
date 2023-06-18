@@ -42,52 +42,49 @@ class RegisterFragment : Fragment() {
             val payment = binding.editTextPayment.text.toString()
 
             if(username.isNotBlank() && password.isNotBlank() && name.isNotBlank() && surname.isNotBlank() && email.isNotBlank() && payment.isNotBlank()){
-               /* val dbHelper = DatabaseHelper(requireContext())
-                val db = dbHelper.writableDatabase
-
-                val values = ContentValues()
-                values.put("username", username)
-                values.put("password", password)
-                values.put("name", name)
-                values.put("surname", surname)
-                values.put("email", email)
-                values.put("payment", payment)
-
-                val rowId = db.insert("user", null, values)
-
-                db.close()*/
-
-                //openActivityLogin()
-                registerUtente(email, password, name, surname, payment, username)
-                Toast.makeText(requireContext(), "Ti sei registrato", Toast.LENGTH_SHORT).show()
+                userRegister(email, password, name, surname, payment, username)
             } else{
-                Toast.makeText(requireContext(), "Devi inserire tutti i campi", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Fill all the fields", Toast.LENGTH_SHORT).show()
             }
         }
-
         return view
-
     }
 
-    private fun registerUtente (email: String, password: String,
+    private fun userRegister (email: String, password: String,
                              name:String, surname: String,
                              payment: String, username: String) {
 
-        Log.v("INSERT", "Step 2!")
-        val query = "INSERT INTO utente VALUES ('dudu', 'dd', 'cc', 'ff', 'aa', 'bb')"
+        val queryC = "SELECT * FROM User WHERE Email = '${email}';"
+        val query = "INSERT INTO User VALUES ('${email}', '${password}', '${name}', '${surname}', '${payment}', '${username}')"
 
-        ClientNetwork.retrofit.insert(query).enqueue(
+        ClientNetwork.retrofit.insert(queryC).enqueue(
             object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful) {
-                        Log.v("INSERT", "Step 3!")
+                        if((response.body()?.get("queryset") as JsonArray).size() == 1){
+                            Toast.makeText(requireContext(), "Account already exists", Toast.LENGTH_SHORT).show()
+                        }else{
+                            ClientNetwork.retrofit.select(query).enqueue(
+                               object : Callback<JsonObject> {
+                                   override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                                       if(response.isSuccessful) {
+                                           Toast.makeText(requireContext(), "Account already exists", Toast.LENGTH_SHORT).show()
+                                       }else{
+                                           Log.v("INSERT", "Error!")
+                                       }
+                                   }
+                                   override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                                       Log.v("INSERT", "Failed!")
+                                   }
+                               }
+                            )
+                        }
                     } else {
-                        Log.v("INSERT", "Merda 2!")
+                        Log.v("INSERT", "Error!")
                     }
                 }
-
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    Log.v("INSERT", "Una Merda!")
+                    Log.v("INSERT", "Failed!")
 
                 }
             }
