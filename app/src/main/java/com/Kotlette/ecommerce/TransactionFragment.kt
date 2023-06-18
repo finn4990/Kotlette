@@ -17,6 +17,8 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TransactionFragment : Fragment() {
 
@@ -26,7 +28,7 @@ class TransactionFragment : Fragment() {
 
     lateinit var code: Array<String>
     lateinit var address: Array<String>
-    lateinit var date: Array<String>
+    lateinit var date: Array<Date>
     lateinit var total: Array<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +64,7 @@ class TransactionFragment : Fragment() {
             object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful) {
-                        Log.v("SELECT", "Step 3!")
+                        Log.v("SELECT", "Response successful")
                         if ((response.body()?.get("queryset") as JsonArray).size() > 0) {
 
 
@@ -71,12 +73,12 @@ class TransactionFragment : Fragment() {
                             Log.v("SELECT", "No tuples on Transaction table")
                         }
                     } else {
-                        Log.v("SELECT", "Merda 2!")
+                        Log.v("SELECT", "Response was bad")
                     }
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-
+                    Log.v("SELECT", "Response failed")
                 }
             }
         )
@@ -125,22 +127,22 @@ class TransactionFragment : Fragment() {
         )
 
         date = arrayOf(
-            "05-05-2552",
-            "20-10-2532",
-            "22-05-2552",
-            "29-03-2082",
-            "10-01-2552",
-            "20-11-2852",
-            "31-11-2002",
-            "20-07-2002",
-            "05-05-2552",
-            "20-10-2532",
-            "22-05-2552",
-            "29-03-2082",
-            "10-01-2552",
-            "20-11-2852",
-            "31-11-2002",
-            "20-07-2002"
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05"),
+            Date("2552-05-05")
         )
 
         total = arrayOf(
