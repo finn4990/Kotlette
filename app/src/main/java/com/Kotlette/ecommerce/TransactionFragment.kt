@@ -1,6 +1,7 @@
 package com.Kotlette.ecommerce
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.adapter.AdapterTransaction
+import com.Kotlette.ecommerce.clientweb.ClientNetwork
 import com.Kotlette.ecommerce.item.ItemTransaction
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class TransactionFragment : Fragment() {
 
@@ -44,6 +51,35 @@ class TransactionFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         adapter = AdapterTransaction(transactionArrayList)
         recyclerView.adapter = adapter
+    }
+
+    private fun getPayments (email: String) {
+
+        val query =
+            "select * from Transaction where EmailT = '${email}';"
+
+        ClientNetwork.retrofit.select(query).enqueue(
+            object : Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if (response.isSuccessful) {
+                        Log.v("SELECT", "Step 3!")
+                        if ((response.body()?.get("queryset") as JsonArray).size() > 0) {
+
+
+
+                        } else {
+                            Log.v("SELECT", "No tuples on Transaction table")
+                        }
+                    } else {
+                        Log.v("SELECT", "Merda 2!")
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+
+                }
+            }
+        )
     }
 
     private fun dataInitialize() {
