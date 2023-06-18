@@ -79,7 +79,7 @@ class LoginFragment : Fragment() {
 
         Log.v("SELECT", "Step 2!")
         val query =
-            "select * from utente where Email = '${email}' and Password = '${password}';"
+            "select * from User where Email = '${email}' and Password = '${password}';"
 
         ClientNetwork.retrofit.select(query).enqueue(
             object : Callback<JsonObject> {
@@ -90,6 +90,7 @@ class LoginFragment : Fragment() {
                             Log.v("SELECT", "Step 4!")
                             openActivityMain()
                         } else {
+                            Log.v("SELECT", "Merda 3!")
                         }
                     } else {
                         Log.v("SELECT", "Merda 2!")
