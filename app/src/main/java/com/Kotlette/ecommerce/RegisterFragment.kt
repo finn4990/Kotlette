@@ -55,20 +55,21 @@ class RegisterFragment : Fragment() {
                              payment: String, username: String) {
 
         val queryC = "SELECT * FROM User WHERE Email = '${email}';"
-        val query = "INSERT INTO User VALUES ('${email}', '${password}', '${name}', '${surname}', '${payment}', '${username}')"
+        val query = "INSERT INTO User (Email, Password, Name, Surname, PayMethod, Username) VALUES ('${email}', '${password}', '${name}', '${surname}', '${payment}', '${username}')"
 
-        ClientNetwork.retrofit.insert(queryC).enqueue(
+        ClientNetwork.retrofit.select(queryC).enqueue(
             object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful) {
                         if((response.body()?.get("queryset") as JsonArray).size() == 1){
                             Toast.makeText(requireContext(), "Account already exists", Toast.LENGTH_SHORT).show()
                         }else{
-                            ClientNetwork.retrofit.select(query).enqueue(
+                            ClientNetwork.retrofit.insert(query).enqueue(
                                object : Callback<JsonObject> {
                                    override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                                        if(response.isSuccessful) {
-                                           Toast.makeText(requireContext(), "Account already exists", Toast.LENGTH_SHORT).show()
+                                           Toast.makeText(requireContext(), "Account created", Toast.LENGTH_SHORT).show()
+                                           openActivityLogin()
                                        }else{
                                            Log.v("INSERT", "Error!")
                                        }

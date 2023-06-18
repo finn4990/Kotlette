@@ -88,7 +88,7 @@ class TransactionFragment : Fragment() {
 
         transactionArrayList = arrayListOf<ItemTransaction>()
 
-        code = arrayOf(
+        /*code = arrayOf(
             "2UFTJ9C377EB",
             "51CZ4ULY121T",
             "L6474THG0SPV",
@@ -168,7 +168,7 @@ class TransactionFragment : Fragment() {
 
             val transaction = ItemTransaction(code[i], address[i], date[i], total[i])
             transactionArrayList.add(transaction)
-        }
+        }*/
 
     }
 

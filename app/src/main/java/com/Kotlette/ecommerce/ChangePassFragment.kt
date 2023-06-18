@@ -60,12 +60,12 @@ class ChangePassFragment : Fragment() {
         val queryC = "SELECT * FROM User WHERE  Email = '${email}' AND Password = '${old_password}';"
         val query = "UPDATE User SET Password = '${new_password}' WHERE email = '${email}'; "
 
-        ClientNetwork.retrofit.insert(queryC).enqueue(
+        ClientNetwork.retrofit.select(queryC).enqueue(
             object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful) {
                         if((response.body()?.get("queryset") as JsonArray).size() == 1){
-                            ClientNetwork.retrofit.select(query).enqueue(
+                            ClientNetwork.retrofit.update(query).enqueue(
                                 object : Callback<JsonObject> {
                                     override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                                         if(response.isSuccessful) {
