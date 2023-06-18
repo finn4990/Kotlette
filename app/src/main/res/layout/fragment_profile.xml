@@ -7,6 +7,7 @@
     tools:context=".ProfileFragment"
     android:background="@color/Tavolozza4">
 
+
     <androidx.cardview.widget.CardView
         android:layout_width="155dp"
         android:layout_height="155dp"
@@ -29,7 +30,6 @@
         android:layout_height="30dp"
         android:layout_gravity="center"
         android:layout_marginBottom="80dp"
-        android:hint="@string/Username"
         android:textSize="16sp" />
 
     <TextView
@@ -38,7 +38,6 @@
         android:layout_height="30dp"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        android:hint="@string/Email"
         android:textSize="16sp" />
 
     <TextView
@@ -47,7 +46,6 @@
         android:layout_height="30dp"
         android:layout_gravity="center"
         android:layout_marginBottom="-40dp"
-        android:hint="@string/Method"
         android:textSize="16sp" />
 
     <Button
@@ -58,14 +56,6 @@
         android:layout_marginTop="140dp"
         android:layout_gravity="center"
         android:backgroundTint="@drawable/changebutton" />
-
-    <Button
-        android:id="@+id/buttonAvatar"
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
-        android:text="@string/ChangeAv"
-        android:layout_marginTop="220dp"
-        android:layout_gravity="center"
-        android:backgroundTint="@drawable/changebutton" />
+ />
 
 </FrameLayout>

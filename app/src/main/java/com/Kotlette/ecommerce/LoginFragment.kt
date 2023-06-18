@@ -9,15 +9,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.Kotlette.ecommerce.clientweb.ClientNetwork
-import com.Kotlette.ecommerce.clientweb.UserAPI
 import com.Kotlette.ecommerce.databinding.FragmentLoginBinding
+import com.Kotlette.ecommerce.file.FileManager
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 class LoginFragment : Fragment() {
@@ -43,30 +41,9 @@ class LoginFragment : Fragment() {
             val password = binding.editTextPassword.text.toString()
 
             if(email.isNotBlank() && password.isNotBlank()) {
-                Log.v("SELECT", "Step 1!")
-                loginUtente(email, password)
-                /*val dbHelper = DatabaseHelper(requireContext())
-                val db = dbHelper.writableDatabase
-
-                val selection = "email = ? AND password = ?"
-                val selectionArgs = arrayOf(email, password)
-
-                val cursor = db.rawQuery("SELECT * FROM user WHERE $selection", selectionArgs)
-
-                if (cursor != null && cursor.moveToFirst()) {
-                    openActivityMain()
-                    Toast.makeText(requireContext(), "Login avvenuto con successo", Toast.LENGTH_SHORT).show()
-                } else {
-
-                    Toast.makeText(requireContext(), "Credenziali errante, riprova", Toast.LENGTH_SHORT).show()
-                }
-
-                cursor?.close()
-                db.close()
-                openActivityMain()
-                Toast.makeText(requireContext(), "Login avvenuto con successo", Toast.LENGTH_SHORT).show()*/
+                userLogin(email, password)
             } else{
-                Toast.makeText(requireContext(), "Devi inserire tutti i campi", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Fill all the fields", Toast.LENGTH_SHORT).show()
             }
 
 
@@ -75,9 +52,9 @@ class LoginFragment : Fragment() {
         return view
     }
 
-    private fun loginUtente (email: String, password: String) {
+    private fun userLogin (email: String, password: String) {
 
-        Log.v("SELECT", "Step 2!")
+        val data = context?.let { FileManager(it) }
         val query =
             "select * from User where Email = '${email}' and Password = '${password}';"
 
@@ -85,20 +62,20 @@ class LoginFragment : Fragment() {
             object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful) {
-                        Log.v("SELECT", "Step 3!")
                         if ((response.body()?.get("queryset") as JsonArray).size() == 1) {
-                            Log.v("SELECT", "Step 4!")
+                            data?.writeToFile("Email.txt", "${email}")
                             openActivityMain()
+                            Toast.makeText(requireContext(), "Successful Login", Toast.LENGTH_SHORT).show()
                         } else {
-                            Log.v("SELECT", "Merda 3!")
+                            Toast.makeText(requireContext(), "Wrong credentials", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Log.v("SELECT", "Merda 2!")
+                        Log.v("SELECT", "Server error")
                     }
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    Log.v("SELECT", "Una Merda!")
+                    Log.v("SELECT", "Can't reach the server")
 
                 }
             }
