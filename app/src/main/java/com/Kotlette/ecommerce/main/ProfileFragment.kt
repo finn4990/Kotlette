@@ -1,15 +1,16 @@
-package com.Kotlette.ecommerce
+package com.Kotlette.ecommerce.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.clientweb.ClientNetwork
 import com.Kotlette.ecommerce.clientweb.DataCallback
 import com.Kotlette.ecommerce.databinding.FragmentProfileBinding
 import com.Kotlette.ecommerce.file.FileManager
+import com.Kotlette.ecommerce.item.ItemTransaction
 import com.Kotlette.ecommerce.model.UserModel
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -46,6 +47,10 @@ class ProfileFragment : Fragment() {
                 binding.textViewU.text = username
                 binding.textViewE.text = email
                 binding.textViewM.text = payMethod
+            }
+
+            override fun onDataReceived(data: ArrayList<ItemTransaction>) {
+                TODO("Not yet implemented")
             }
 
         }

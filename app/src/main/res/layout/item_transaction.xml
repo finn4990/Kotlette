@@ -11,12 +11,6 @@
         android:text="ID: " />
 
     <TextView
-        android:id="@+id/address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Indirizzo: " />
-
-    <TextView
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

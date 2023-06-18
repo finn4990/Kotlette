@@ -22,7 +22,7 @@ class AdapterTransaction (private val transactionList : ArrayList<ItemTransactio
 
     override fun onBindViewHolder(holder: ViewHolderTransaction, position: Int) {
         val currentItem = transactionList[position]
-        holder.code.text = "Data: " + currentItem.code
+        holder.code.text = "Codice: " + currentItem.code
         holder.date.text = "Data: " + currentItem.date
         holder.total.text = "Importo: " + currentItem.total
     }
@@ -30,7 +30,6 @@ class AdapterTransaction (private val transactionList : ArrayList<ItemTransactio
     class ViewHolderTransaction(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val code : TextView = itemView.findViewById(R.id.transaction_code)
-        val address : TextView = itemView.findViewById(R.id.address)
         val date : TextView = itemView.findViewById(R.id.date)
         val total : TextView = itemView.findViewById(R.id.total)
     }

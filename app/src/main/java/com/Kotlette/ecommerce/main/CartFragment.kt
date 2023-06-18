@@ -1,4 +1,4 @@
-package com.Kotlette.ecommerce
+package com.Kotlette.ecommerce.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.adapter.AdapterCart
 import com.Kotlette.ecommerce.item.ItemCart
 

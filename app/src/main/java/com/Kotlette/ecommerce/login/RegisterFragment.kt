@@ -1,6 +1,5 @@
-package com.Kotlette.ecommerce
+package com.Kotlette.ecommerce.login
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log

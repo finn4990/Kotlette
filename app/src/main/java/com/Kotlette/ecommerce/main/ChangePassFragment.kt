@@ -1,4 +1,4 @@
-package com.Kotlette.ecommerce
+package com.Kotlette.ecommerce.main
 
 import android.os.Bundle
 import android.util.Log

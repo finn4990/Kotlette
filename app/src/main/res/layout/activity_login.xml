@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/Tavolozza1"
     android:id="@+id/Frame1"
-    tools:context=".LoginActivity">
+    tools:context=".login.LoginActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.Kotlette.ecommerce.LoginFragment" />
+        android:name="com.Kotlette.ecommerce.login.LoginFragment" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

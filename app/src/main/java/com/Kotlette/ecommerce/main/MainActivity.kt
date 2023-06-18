@@ -1,10 +1,11 @@
-package com.Kotlette.ecommerce
+package com.Kotlette.ecommerce.main
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

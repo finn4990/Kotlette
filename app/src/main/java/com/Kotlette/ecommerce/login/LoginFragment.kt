@@ -1,4 +1,4 @@
-package com.Kotlette.ecommerce
+package com.Kotlette.ecommerce.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.Kotlette.ecommerce.clientweb.ClientNetwork
 import com.Kotlette.ecommerce.databinding.FragmentLoginBinding
 import com.Kotlette.ecommerce.file.FileManager
+import com.Kotlette.ecommerce.main.MainActivity
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import retrofit2.Call
