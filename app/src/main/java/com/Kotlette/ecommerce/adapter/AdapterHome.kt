@@ -24,7 +24,7 @@ class AdapterHome (private val homeList : ArrayList<ItemHome>) :
     override fun onBindViewHolder(holder: ViewHolderHome, position: Int) {
         val currentItem = homeList[position]
         holder.title.text = currentItem.title
-        holder.image.setImageResource(currentItem.image)
+        holder.image.setImageBitmap(currentItem.image)
         holder.price.text = "Prezzo: " + currentItem.price
     }
 

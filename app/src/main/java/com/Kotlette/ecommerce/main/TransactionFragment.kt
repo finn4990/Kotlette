@@ -56,7 +56,7 @@ class TransactionFragment : Fragment() {
 
         }
 
-        var transactionArrayList = getPayments(callback)
+        getPayments(callback)
     }
 
     private fun getPayments(callback: TransactionCallback) {

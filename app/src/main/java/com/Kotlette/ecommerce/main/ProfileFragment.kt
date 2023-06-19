@@ -49,10 +49,6 @@ class ProfileFragment : Fragment() {
                 binding.textViewM.text = payMethod
             }
 
-            override fun onDataReceived(data: ArrayList<ItemTransaction>) {
-                TODO("Not yet implemented")
-            }
-
         }
 
         getData(callback)

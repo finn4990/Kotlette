@@ -1,4 +1,6 @@
 package com.Kotlette.ecommerce.item
 
-class ItemHome (val title: String, val image: Int, val price: String) {
+import android.graphics.Bitmap
+
+class ItemHome(val title: String?, val image: Bitmap?, val price: String?) {
 }
