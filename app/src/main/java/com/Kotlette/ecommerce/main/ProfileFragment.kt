@@ -5,12 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.clientweb.ClientNetwork
 import com.Kotlette.ecommerce.clientweb.DataCallback
 import com.Kotlette.ecommerce.databinding.FragmentProfileBinding
 import com.Kotlette.ecommerce.file.FileManager
-import com.Kotlette.ecommerce.item.ItemTransaction
 import com.Kotlette.ecommerce.model.UserModel
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -19,7 +21,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +32,25 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
         val binding = FragmentProfileBinding.inflate(layoutInflater)
         val view = binding.root
+
+        val spinner: Spinner = binding.spinner
+        context?.let {
+            ArrayAdapter.createFromResource(
+                it,
+                R.array.Category,
+                android.R.layout.simple_spinner_item
+            ).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = adapter
+            }
+        }
+
+        spinner.onItemSelectedListener = this
+
+
+
 
         val callback = object : DataCallback {
             override fun onDataReceived(data: String?) {
@@ -96,4 +114,13 @@ class ProfileFragment : Fragment() {
         })
     }
 
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+        val category = FileManager(requireContext())
+        val Choice = parent.getItemAtPosition(pos).toString()
+        category.writeToFile("category.txt", Choice)
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>) {
+        // Another interface callback
+    }
 }

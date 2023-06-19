@@ -18,4 +18,5 @@
     <string name="Welcome">WELCOME!</string>
     <string name="LogAcc">Enter into your account</string>
     <string name="RegAcc">If you don\'t have one, register now!</string>
+    <string name="FavCat">Choose your favorite category</string>
 </resources>

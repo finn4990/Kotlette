@@ -48,14 +48,33 @@
         android:layout_marginBottom="-40dp"
         android:textSize="16sp" />
 
+    <TextView
+        android:id="@+id/textViewF"
+        android:layout_width="350dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="-100dp"
+        android:hint="@string/FavCat"
+        android:textSize="16sp" />
+
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Choose favourite category"
+        android:layout_marginTop="150dp"/>
+
     <Button
         android:id="@+id/buttonPass"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:text="@string/ChangePass"
-        android:layout_marginTop="140dp"
         android:layout_gravity="center"
-        android:backgroundTint="@drawable/changebutton" />
- />
+        android:layout_marginTop="250dp"
+        android:backgroundTint="@drawable/changebutton"
+        android:text="@string/ChangePass" />
+
+
 
 </FrameLayout>
