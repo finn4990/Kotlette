@@ -68,10 +68,22 @@ class HomeFragment : Fragment() {
         val callback = object : HomeCallback {
 
             override fun onDataReceived(data: ArrayList<ItemHome>) {
+                recyclerViewPopular = view.findViewById(R.id.recyclerViewPopular)
+                recyclerViewPopular.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                recyclerViewPopular.setHasFixedSize(true)
+                adapter = AdapterHome(data)
+                recyclerViewPopular.adapter = adapter
+
+                recyclerViewSale = view.findViewById(R.id.recyclerViewSale)
+                recyclerViewSale.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                recyclerViewSale.setHasFixedSize(true)
+                //adapter = AdapterHome(data)
+                recyclerViewSale.adapter = adapter
+
                 recyclerViewAll = view.findViewById(R.id.recyclerViewAll)
                 recyclerViewAll.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 recyclerViewAll.setHasFixedSize(true)
-                adapter = AdapterHome(data)
+                //adapter = AdapterHome(data)
                 recyclerViewAll.adapter = adapter
             }
 
@@ -82,8 +94,6 @@ class HomeFragment : Fragment() {
 
     private fun getProduct(callback: HomeCallback) {
 
-        val data = context?.let { FileManager(it) }
-        val email = data?.readFromFile("Email.txt")
         var homeArrayList = arrayListOf<ItemHome>()
 
         val query =
@@ -100,9 +110,9 @@ class HomeFragment : Fragment() {
 
                                 val imageCall = object : ImageCallback {
                                     override fun onDataReceived(data: Bitmap?) {
-                                        println(data.toString())
                                         val p = Gson().fromJson(result, ProductModel::class.java)
                                         homeArrayList.add(ItemHome(p.name, data, p.price))
+                                        adapter.notifyDataSetChanged()
                                     }
                                 }
                                 getImage(result.asJsonObject, imageCall)
