@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.search -> replaceFragment(SearchFragment())
             R.id.account -> replaceFragment(ProfileFragment())
             R.id.home -> replaceFragment(TransactionFragment())
             R.id.cart -> replaceFragment(CartFragment())
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_layout,fragment)
-        fragmentTransaction.addToBackStack("fragment register")
+        fragmentTransaction.addToBackStack("new fragment")
         fragmentTransaction.commit()
     }
 

@@ -3,15 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:title="User"
+        android:icon="@drawable/baseline_search_24"
+        android:id="@+id/search"
+        app:showAsAction="always"/>
+    <item android:title="User"
         android:icon="@drawable/ic_baseline_account_circle_24"
         android:id="@+id/account"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item android:title="Home"
         android:icon="@drawable/ic_baseline_home_24"
         android:id="@+id/home"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item android:title="Cart"
         android:icon="@drawable/ic_baseline_shopping_cart_24"
         android:id="@+id/cart"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 </menu>
