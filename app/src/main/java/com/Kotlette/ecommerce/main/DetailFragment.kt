@@ -11,12 +11,14 @@ import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.adapter.AdapterDetail
 import com.Kotlette.ecommerce.databinding.FragmentDetailBinding
 import com.Kotlette.ecommerce.item.ItemDetail
+import com.Kotlette.ecommerce.item.ItemHome
 
 class DetailFragment : Fragment() {
 
     private lateinit var adapter : AdapterDetail
     private lateinit var recyclerView : RecyclerView
     private lateinit var detailArrayList : ArrayList<ItemDetail>
+    private lateinit var product : ItemHome
 
     lateinit var comment: Array<String>
     lateinit var iconUser: Array<Int>
@@ -24,7 +26,7 @@ class DetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        product = ItemHome(null, null, null, null)
     }
 
     override fun onCreateView(
