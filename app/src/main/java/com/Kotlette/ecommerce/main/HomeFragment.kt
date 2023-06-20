@@ -4,22 +4,19 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.adapter.AdapterHome
-import com.Kotlette.ecommerce.adapter.AdapterTransaction
 import com.Kotlette.ecommerce.clientweb.ClientNetwork
-import com.Kotlette.ecommerce.file.FileManager
 import com.Kotlette.ecommerce.item.ItemHome
-import com.Kotlette.ecommerce.item.ItemTransaction
 import com.Kotlette.ecommerce.model.ProductModel
-import com.Kotlette.ecommerce.model.TransactionModel
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -29,7 +26,10 @@ import kotlin.random.Random
 
 class HomeFragment : Fragment() {
 
-    private lateinit var adapter : AdapterHome
+    private lateinit var adapterPopular : AdapterHome
+    private lateinit var adapterSale : AdapterHome
+    private lateinit var adapterAll : AdapterHome
+
     private lateinit var recyclerViewPopular : RecyclerView
     private lateinit var recyclerViewSale : RecyclerView
     private lateinit var recyclerViewAll : RecyclerView
@@ -57,8 +57,8 @@ class HomeFragment : Fragment() {
                 recyclerViewPopular = view.findViewById(R.id.recyclerViewPopular)
                 recyclerViewPopular.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 recyclerViewPopular.setHasFixedSize(true)
-                adapter = AdapterHome(data)
-                recyclerViewPopular.adapter = adapter
+                adapterPopular = AdapterHome(data)
+                recyclerViewPopular.adapter = adapterPopular
 
             }
         }
@@ -69,16 +69,16 @@ class HomeFragment : Fragment() {
                 recyclerViewSale = view.findViewById(R.id.recyclerViewSale)
                 recyclerViewSale.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 recyclerViewSale.setHasFixedSize(true)
-                var sale = arrayListOf<ItemHome>()
+                /*var sale = arrayListOf<ItemHome>()
 
                 for (i in 1..5 ) {
                     var r = Random.nextInt(0, data.size)
                     sale.add(data[r])
                     data.removeAt(r)
-                }
+                }*/
 
-                adapter = AdapterHome(sale)
-                recyclerViewSale.adapter = adapter
+                adapterSale = AdapterHome(data)
+                recyclerViewSale.adapter = adapterSale
             }
         }
 
@@ -88,8 +88,8 @@ class HomeFragment : Fragment() {
                 recyclerViewAll = view.findViewById(R.id.recyclerViewAll)
                 recyclerViewAll.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 recyclerViewAll.setHasFixedSize(true)
-                adapter = AdapterHome(data)
-                recyclerViewAll.adapter = adapter
+                adapterAll = AdapterHome(data)
+                recyclerViewAll.adapter = adapterAll
             }
 
         }
@@ -102,12 +102,13 @@ class HomeFragment : Fragment() {
     private fun getProduct(callback: HomeCallback, choice: Int) {
 
         var homeArrayList = arrayListOf<ItemHome>()
+        var sale = arrayListOf<JsonObject>()
         var query = ""
 
         when (choice) {
-            1 -> query = "select Pname, Price, ImageP from Product ORDER BY Quantity DESC;"
-            2, 3 -> query = "select Pname, Price, ImageP from Product;"
-            4 -> query = "select Pname, Price, ImageP from Product;"
+            1 -> query = "select PID, Pname, Price, ImageP from Product ORDER BY Quantity DESC;"
+            2, 3 -> query = "select PID, Pname, Price, ImageP from Product;"
+            4 -> query = "select PID, Pname, Price, ImageP from Product;"
         }
 
 
@@ -118,16 +119,47 @@ class HomeFragment : Fragment() {
                         Log.v("SELECT", "Response successful")
                         val resultSet = response.body()?.getAsJsonArray("queryset")
                         if (resultSet != null && resultSet.size() > 0) {
-                            for (result in resultSet) {
-
-                                val imageCall = object : ImageCallback {
-                                    override fun onDataReceived(data: Bitmap?) {
-                                        val p = Gson().fromJson(result, ProductModel::class.java)
-                                        homeArrayList.add(ItemHome(null, p.name, data, p.price))
-                                        adapter.notifyDataSetChanged()
+                            when (choice) {
+                                1 -> for (i in 0..4) {
+                                        val imageCall = object : ImageCallback {
+                                            override fun onDataReceived(data: Bitmap?) {
+                                                val p = Gson().fromJson(resultSet[i], ProductModel::class.java)
+                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price))
+                                                adapterPopular.notifyDataSetChanged()
+                                            }
+                                        }
+                                        getImage(resultSet[i].asJsonObject, imageCall)
                                     }
+
+                                2 -> {
+                                        for (i in 0..4) {
+                                            var r = Random.nextInt(resultSet.size())
+                                            sale.add(resultSet[r].asJsonObject)
+                                            resultSet.remove(r)
+                                        }
+                                        for ((c, i) in sale.withIndex()) {
+                                            val imageCall = object : ImageCallback {
+                                                    override fun onDataReceived(data: Bitmap?) {
+                                                        val p = Gson().fromJson(i, ProductModel::class.java)
+                                                        println(p.price)
+                                                        homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100-20))?.div(100)))
+                                                        adapterSale.notifyDataSetChanged()
+                                                    }
+                                                }
+                                            getImage(i, imageCall)
+                                        }
                                 }
-                                getImage(result.asJsonObject, imageCall)
+
+                                3 -> for (result in resultSet) {
+                                        val imageCall = object : ImageCallback {
+                                            override fun onDataReceived(data: Bitmap?) {
+                                                val p = Gson().fromJson(result, ProductModel::class.java)
+                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price))
+                                                adapterAll.notifyDataSetChanged()
+                                            }
+                                        }
+                                        getImage(result.asJsonObject, imageCall)
+                                    }
                             }
                             callback.onDataReceived(homeArrayList)
                         } else {
@@ -170,7 +202,7 @@ class HomeFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    callback.onDataReceived(image)
+                    callback.onDataReceived(image) // Impossibile raggiungere il server
                 }
 
             }

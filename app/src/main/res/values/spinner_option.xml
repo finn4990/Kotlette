@@ -3,7 +3,7 @@
     <string-array name="Category">
         <item>Informatica</item>
         <item>Libri</item>
-        <item>Abbigliamenti</item>
+        <item>Abbigliamento</item>
         <item>Arredamento</item>
         <item>Accessori</item>
     </string-array>

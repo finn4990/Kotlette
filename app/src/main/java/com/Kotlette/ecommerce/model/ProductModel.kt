@@ -23,7 +23,7 @@ data class ProductModel(
     val quantity: String?,
 
     @SerializedName("Price")
-    val price: String?,
+    val price: Double?,
 
     @SerializedName("ImageP")
     val image: String?
