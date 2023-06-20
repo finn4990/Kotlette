@@ -25,13 +25,22 @@
             app:layout_constraintStart_toEndOf="@+id/user_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="VOTO: 5"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="236dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="84dp"
+            android:numStars="5"
+            android:progressTint="@android:color/holo_orange_light"
+            android:rating="5"
+            android:scaleX="0.3"
+            android:scaleY="0.3"
+            android:stepSize=".5"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/user_icon" />
+            app:layout_constraintHorizontal_bias="0.176"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

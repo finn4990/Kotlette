@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
@@ -25,13 +26,13 @@ class AdapterDetail (private val detailList : ArrayList<ItemDetail>) :
         val currentItem = detailList[position]
         holder.userIcon.setImageResource(currentItem.userIcon)
         holder.comment.text = currentItem.comment
-        holder.rating.text = "VOTO: " + currentItem.rating
+        holder.rating.rating =  currentItem.ratingBar.toFloat()
     }
 
     class ViewHolderDetail(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val userIcon : ImageView = itemView.findViewById(R.id.user_icon)
         val comment : TextView = itemView.findViewById(R.id.comment)
-        val rating : TextView = itemView.findViewById(R.id.rating)
+        val rating : RatingBar = itemView.findViewById(R.id.ratingBar)
     }
 }
