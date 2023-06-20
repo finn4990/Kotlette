@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.adapter.AdapterDetail
+import com.Kotlette.ecommerce.databinding.FragmentDetailBinding
 import com.Kotlette.ecommerce.item.ItemDetail
 
 class DetailFragment : Fragment() {
@@ -30,8 +31,20 @@ class DetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail, container, false)
+        val binding = FragmentDetailBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        binding.buttonRate.setOnClickListener{
+            val fragmentManager = getActivity()?.supportFragmentManager
+            val fragmentTransaction = fragmentManager?.beginTransaction()
+
+            val myFragment = ReviewFragment()
+            fragmentTransaction?.replace(R.id.frame_layout, myFragment)
+            fragmentTransaction?.addToBackStack("fragment Review")
+            fragmentTransaction?.commit()
+        }
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -111,7 +124,7 @@ class DetailFragment : Fragment() {
 
         for(i in comment.indices){
 
-            val detail = ItemDetail(iconUser[i], comment[i], vote[i])
+            val detail = ItemDetail(iconUser[i], comment[i], vote[i],)
             detailArrayList.add(detail)
         }
 

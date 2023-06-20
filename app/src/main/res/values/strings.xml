@@ -19,4 +19,7 @@
     <string name="LogAcc">Enter into your account</string>
     <string name="RegAcc">If you don\'t have one, register now!</string>
     <string name="FavCat">Choose your favorite category</string>
+    <string name="Rate">Rate</string>
+    <string name="Review">Write a review</string>
+    <string name="SendRvw">Submit review</string>
 </resources>
