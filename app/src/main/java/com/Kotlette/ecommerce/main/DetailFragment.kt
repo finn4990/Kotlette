@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.adapter.AdapterDetail
 import com.Kotlette.ecommerce.databinding.FragmentDetailBinding
+import com.Kotlette.ecommerce.file.FileManager
 import com.Kotlette.ecommerce.item.ItemDetail
 import com.Kotlette.ecommerce.item.ItemHome
 
@@ -35,8 +36,11 @@ class DetailFragment : Fragment() {
     ): View? {
         val binding = FragmentDetailBinding.inflate(inflater, container, false)
         val view = binding.root
+        val idp = product.id
+        val data = context?.let { FileManager(it) }
 
         binding.buttonRate.setOnClickListener{
+            data?.writeToFile("Id.txt", "${idp}")
             val fragmentManager = getActivity()?.supportFragmentManager
             val fragmentTransaction = fragmentManager?.beginTransaction()
 
