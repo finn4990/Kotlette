@@ -25,6 +25,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.random.Random
 
 class HomeFragment : Fragment() {
 
@@ -48,24 +49,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //dataInitialize()
 
         //RecycleViewPopular
-        /*recyclerViewPopular = view.findViewById(R.id.recyclerViewPopular)
-        recyclerViewPopular.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        recyclerViewPopular.setHasFixedSize(true)
-        adapter = AdapterHome(data)
-        recyclerViewPopular.adapter = adapter
-
-        //RecycleViewSale
-        recyclerViewSale = view.findViewById(R.id.recyclerViewSale)
-        recyclerViewSale.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        recyclerViewSale.setHasFixedSize(true)
-        adapter = AdapterHome(data)
-        recyclerViewSale.adapter = adapter*/
-
-        //RecycleViewAll
-        val callback = object : HomeCallback {
+        val callbackPopular = object : HomeCallback {
 
             override fun onDataReceived(data: ArrayList<ItemHome>) {
                 recyclerViewPopular = view.findViewById(R.id.recyclerViewPopular)
@@ -74,30 +60,56 @@ class HomeFragment : Fragment() {
                 adapter = AdapterHome(data)
                 recyclerViewPopular.adapter = adapter
 
+            }
+        }
+
+        //RecycleViewSale
+        val callbackSale = object : HomeCallback {
+            override fun onDataReceived(data: ArrayList<ItemHome>) {
                 recyclerViewSale = view.findViewById(R.id.recyclerViewSale)
                 recyclerViewSale.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 recyclerViewSale.setHasFixedSize(true)
-                //adapter = AdapterHome(data)
-                recyclerViewSale.adapter = adapter
+                var sale = arrayListOf<ItemHome>()
 
+                for (i in 1..5 ) {
+                    var r = Random.nextInt(0, data.size)
+                    sale.add(data[r])
+                    data.removeAt(r)
+                }
+
+                adapter = AdapterHome(sale)
+                recyclerViewSale.adapter = adapter
+            }
+        }
+
+        //RecycleViewAll
+        val callbackAll = object : HomeCallback {
+            override fun onDataReceived(data: ArrayList<ItemHome>) {
                 recyclerViewAll = view.findViewById(R.id.recyclerViewAll)
                 recyclerViewAll.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 recyclerViewAll.setHasFixedSize(true)
-                //adapter = AdapterHome(data)
+                adapter = AdapterHome(data)
                 recyclerViewAll.adapter = adapter
             }
 
         }
 
-        getProduct(callback)
+        getProduct(callbackPopular, 1)
+        getProduct(callbackSale, 2)
+        getProduct(callbackAll, 3)
     }
 
-    private fun getProduct(callback: HomeCallback) {
+    private fun getProduct(callback: HomeCallback, choice: Int) {
 
         var homeArrayList = arrayListOf<ItemHome>()
+        var query = ""
 
-        val query =
-            "select Pname, Price, ImageP from Product;"
+        when (choice) {
+            1 -> query = "select Pname, Price, ImageP from Product ORDER BY Quantity DESC;"
+            2, 3 -> query = "select Pname, Price, ImageP from Product;"
+            4 -> query = "select Pname, Price, ImageP from Product;"
+        }
+
 
         ClientNetwork.retrofit.select(query).enqueue(
             object : Callback<JsonObject> {
@@ -111,7 +123,7 @@ class HomeFragment : Fragment() {
                                 val imageCall = object : ImageCallback {
                                     override fun onDataReceived(data: Bitmap?) {
                                         val p = Gson().fromJson(result, ProductModel::class.java)
-                                        homeArrayList.add(ItemHome(p.name, data, p.price))
+                                        homeArrayList.add(ItemHome(null, p.name, data, p.price))
                                         adapter.notifyDataSetChanged()
                                     }
                                 }
@@ -165,41 +177,6 @@ class HomeFragment : Fragment() {
         )
     }
 
-    /*private fun getImage(url: String?): Int? {
-
-        var image: Int? = null
-        println(url)
-        if (url != null) {
-            ClientNetwork.retrofit.getAvatar(url).enqueue(
-                object : Callback<ResponseBody> {
-                    override fun onResponse(
-                        call: Call<ResponseBody>,
-                        response: Response<ResponseBody>
-                    ) {
-                        if (response.isSuccessful) {
-                            Log.v("IMAGE", "Response successful")
-                            val result = response.body()
-                            if (result != null) {
-                                println(result)
-                            } else {
-                                Log.v("IMAGE", "No tuples on Transaction table") // Nessun risultato trovato
-                            }
-                        } else {
-                            Log.v("IMAGE", "No tuples on Transaction table") // Errore del server
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                        Log.v("IMAGE", "Response failed") // Impossibile raggiungere il server
-                    }
-                })
-            return image
-        }else {
-            Log.v("IMAGE", "No url")
-            return null
-        }
-    }*/
-
     interface HomeCallback {
         fun onDataReceived(data: ArrayList<ItemHome>)
 
@@ -209,74 +186,5 @@ class HomeFragment : Fragment() {
         fun onDataReceived(data: Bitmap?)
 
     }
-
-    /*private fun dataInitialize() {
-
-        homeArrayList = arrayListOf<ItemHome>()
-
-        title = arrayOf(
-            "Via Badia 9",
-            "Via Tiepolo 15",
-            "Piazza Navona 45A",
-            "Srada Longevo 8",
-            "Viale Regione Siciliana 77",
-            "Via Cordova 6",
-            "Via M. De Cervantes 2",
-            "Piazza A. Arrigo 4",
-            "Via Badia 9",
-            "Via Tiepolo 15",
-            "Piazza Navona 45A",
-            "Srada Longevo 8",
-            "Viale Regione Siciliana 77",
-            "Via Cordova 6",
-            "Via M. De Cervantes 2",
-            "Piazza A. Arrigo 4"
-        )
-
-        image = arrayOf(
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24
-        )
-
-        price = arrayOf(
-            "15,58€",
-            "26,18€",
-            "100,00€",
-            "48,58€",
-            "35,58€",
-            "15,53€",
-            "7,22€",
-            "18,40€",
-            "15,58€",
-            "26,18€",
-            "100,00€",
-            "48,58€",
-            "35,58€",
-            "15,53€",
-            "7,22€",
-            "18,40€"
-        )
-
-        for(i in title.indices){
-
-            val home = ItemHome(title[i], image[i], price[i])
-            homeArrayList.add(home)
-        }
-
-    }*/
 
 }
