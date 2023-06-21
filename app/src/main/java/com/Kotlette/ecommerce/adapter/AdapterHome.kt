@@ -12,9 +12,16 @@ import com.Kotlette.ecommerce.item.ItemHome
 class AdapterHome (private val homeList : ArrayList<ItemHome>) :
     RecyclerView.Adapter<AdapterHome.ViewHolderHome>() {
 
+    private lateinit var listener: onItemClickListener
+    interface onItemClickListener{
+        fun onItemClick(position: Int)
+    }
+    fun setOnItemClickListener(listener: onItemClickListener) {
+        this.listener = listener
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderHome {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_home, parent, false)
-        return ViewHolderHome(itemView)
+        return ViewHolderHome(itemView, listener)
     }
 
     override fun getItemCount(): Int {
@@ -28,10 +35,16 @@ class AdapterHome (private val homeList : ArrayList<ItemHome>) :
         holder.price.text = "Prezzo: " + currentItem.price
     }
 
-    class ViewHolderHome(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolderHome(itemView: View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
         val title : TextView = itemView.findViewById(R.id.title_product)
         val image : ImageView = itemView.findViewById(R.id.image_product)
         val price : TextView = itemView.findViewById(R.id.price_product)
+
+        init {
+            itemView.setOnClickListener{
+                listener.onItemClick(adapterPosition)
+            }
+        }
     }
 }

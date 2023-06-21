@@ -7,7 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
@@ -59,6 +62,11 @@ class HomeFragment : Fragment() {
                 recyclerViewPopular.setHasFixedSize(true)
                 adapterPopular = AdapterHome(data)
                 recyclerViewPopular.adapter = adapterPopular
+                adapterPopular.setOnItemClickListener(object: AdapterHome.onItemClickListener{
+                    override fun onItemClick(position: Int) {
+                        Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()
+                    }
+                })
 
             }
         }
@@ -69,16 +77,13 @@ class HomeFragment : Fragment() {
                 recyclerViewSale = view.findViewById(R.id.recyclerViewSale)
                 recyclerViewSale.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 recyclerViewSale.setHasFixedSize(true)
-                /*var sale = arrayListOf<ItemHome>()
-
-                for (i in 1..5 ) {
-                    var r = Random.nextInt(0, data.size)
-                    sale.add(data[r])
-                    data.removeAt(r)
-                }*/
-
                 adapterSale = AdapterHome(data)
                 recyclerViewSale.adapter = adapterSale
+                adapterSale.setOnItemClickListener(object: AdapterHome.onItemClickListener{
+                    override fun onItemClick(position: Int) {
+                        Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
         }
 
@@ -90,6 +95,24 @@ class HomeFragment : Fragment() {
                 recyclerViewAll.setHasFixedSize(true)
                 adapterAll = AdapterHome(data)
                 recyclerViewAll.adapter = adapterAll
+                adapterAll.setOnItemClickListener(object: AdapterHome.onItemClickListener{
+                    override fun onItemClick(position: Int) {
+                        setFragmentResult("Product", bundleOf(
+                            "bundleId" to data[position].id,
+                            "bundlePrice" to data[position].price,
+                            "bundleTitle" to data[position].title,
+                            "bundleImage" to data[position].image)
+                        )
+                        val fragmentManager = getActivity()?.supportFragmentManager
+                        val fragmentTransaction = fragmentManager?.beginTransaction()
+
+                        val myFragment = DetailFragment()
+                        fragmentTransaction?.replace(R.id.frame_layout, myFragment)
+                        fragmentTransaction?.addToBackStack("fragment ChangPass")
+                        fragmentTransaction?.commit()
+                        Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
 
         }
@@ -97,6 +120,7 @@ class HomeFragment : Fragment() {
         getProduct(callbackPopular, 1)
         getProduct(callbackSale, 2)
         getProduct(callbackAll, 3)
+
     }
 
     private fun getProduct(callback: HomeCallback, choice: Int) {
@@ -211,12 +235,10 @@ class HomeFragment : Fragment() {
 
     interface HomeCallback {
         fun onDataReceived(data: ArrayList<ItemHome>)
-
     }
 
     interface ImageCallback {
         fun onDataReceived(data: Bitmap?)
-
     }
 
 }

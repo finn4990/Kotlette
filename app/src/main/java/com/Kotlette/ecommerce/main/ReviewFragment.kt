@@ -46,7 +46,7 @@ class ReviewFragment : Fragment() {
                 Toast.makeText(requireContext(), "Fill all the fields!", Toast.LENGTH_SHORT).show()
             }
         }
-        return inflater.inflate(R.layout.fragment_review, container, false)
+        return view
     }
 
     private fun InsertReview(rating: Float, review: String, email: String?, idP: Int) {

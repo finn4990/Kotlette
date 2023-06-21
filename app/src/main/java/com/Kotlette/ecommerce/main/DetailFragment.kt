@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
@@ -23,11 +25,10 @@ class DetailFragment : Fragment() {
 
     lateinit var comment: Array<String>
     lateinit var iconUser: Array<Int>
-    lateinit var vote: Array<String>
+    lateinit var vote: Array<Double>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        product = ItemHome(null, null, null, null)
     }
 
     override fun onCreateView(
@@ -36,11 +37,18 @@ class DetailFragment : Fragment() {
     ): View? {
         val binding = FragmentDetailBinding.inflate(inflater, container, false)
         val view = binding.root
-        val idp = product.id
         val data = context?.let { FileManager(it) }
 
+        setFragmentResultListener("Product") { requestKey, bundle ->
+            var id = bundle.getInt("bundleId")
+            var title = bundle.getString("bundleTitle")
+            var price = bundle.getDouble("bundlePrice")
+            product = ItemHome(id, title,null, price)
+            binding.titleProduct.text = product.title
+        }
+
         binding.buttonRate.setOnClickListener{
-            data?.writeToFile("Id.txt", "${idp}")
+            data?.writeToFile("Id.txt", "${product.id}")
             val fragmentManager = getActivity()?.supportFragmentManager
             val fragmentTransaction = fragmentManager?.beginTransaction()
 
@@ -67,6 +75,9 @@ class DetailFragment : Fragment() {
 
     }
 
+    private fun navigateToDetailFragment(){
+    }
+
     private fun dataInitialize() {
 
         detailArrayList = arrayListOf<ItemDetail>()
@@ -91,22 +102,22 @@ class DetailFragment : Fragment() {
         )
 
         vote = arrayOf(
-            "9",
-            "15",
-            "45A",
-            "8",
-            "77",
-            "6",
-            "2",
-            "4",
-            "9",
-            "15",
-            "45A",
-            "8",
-            "77",
-            "6",
-            "2",
-            "4"
+            3.0,
+            2.0,
+            3.0,
+            2.0,
+            3.0,
+            2.0,
+            3.0,
+            2.0,
+            3.0,
+            2.0,
+            3.0,
+            2.0,
+            3.0,
+            2.0,
+            2.0,
+            4.0
         )
 
         iconUser = arrayOf(
