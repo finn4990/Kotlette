@@ -21,10 +21,11 @@
         android:layout_height="40dp"
         android:hint="@string/SeaCat" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RecyclerViewCategory"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView2"
+        android:name="com.Kotlette.ecommerce.main.CatSearchFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"/>
+        android:layout_height="wrap_content" />
+
 
 </LinearLayout>
