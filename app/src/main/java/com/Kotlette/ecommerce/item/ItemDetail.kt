@@ -1,4 +1,4 @@
 package com.Kotlette.ecommerce.item
 
-class ItemDetail(val userIcon: Int, val comment: String, val ratingBar: Double) {
+class ItemDetail(val email: String?, val comment: String?, val ratingBar: Double?) {
 }

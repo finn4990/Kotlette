@@ -62,7 +62,7 @@ class HomeFragment : Fragment() {
                 recyclerViewPopular.setHasFixedSize(true)
                 adapterPopular = AdapterHome(data)
                 recyclerViewPopular.adapter = adapterPopular
-                adapterPopular.setOnItemClickListener(object: AdapterHome.onItemClickListener{
+                adapterPopular.setOnItemClickListener(object: AdapterHome.OnItemClickListener{
                     override fun onItemClick(position: Int) {
                         Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()
                     }
@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
                 recyclerViewSale.setHasFixedSize(true)
                 adapterSale = AdapterHome(data)
                 recyclerViewSale.adapter = adapterSale
-                adapterSale.setOnItemClickListener(object: AdapterHome.onItemClickListener{
+                adapterSale.setOnItemClickListener(object: AdapterHome.OnItemClickListener{
                     override fun onItemClick(position: Int) {
                         Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()
                     }
@@ -95,20 +95,19 @@ class HomeFragment : Fragment() {
                 recyclerViewAll.setHasFixedSize(true)
                 adapterAll = AdapterHome(data)
                 recyclerViewAll.adapter = adapterAll
-                adapterAll.setOnItemClickListener(object: AdapterHome.onItemClickListener{
+                adapterAll.setOnItemClickListener(object: AdapterHome.OnItemClickListener{
                     override fun onItemClick(position: Int) {
                         setFragmentResult("Product", bundleOf(
                             "bundleId" to data[position].id,
                             "bundlePrice" to data[position].price,
-                            "bundleTitle" to data[position].title,
-                            "bundleImage" to data[position].image)
+                            "bundleTitle" to data[position].title
+                            )
                         )
-                        val fragmentManager = getActivity()?.supportFragmentManager
+                        val fragmentManager = activity?.supportFragmentManager
                         val fragmentTransaction = fragmentManager?.beginTransaction()
 
-                        val myFragment = DetailFragment()
-                        fragmentTransaction?.replace(R.id.frame_layout, myFragment)
-                        fragmentTransaction?.addToBackStack("fragment ChangPass")
+                        fragmentTransaction?.replace(R.id.frame_layout, DetailFragment())
+                        fragmentTransaction?.addToBackStack("Fragment Detail")
                         fragmentTransaction?.commit()
                         Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()
                     }
@@ -125,8 +124,8 @@ class HomeFragment : Fragment() {
 
     private fun getProduct(callback: HomeCallback, choice: Int) {
 
-        var homeArrayList = arrayListOf<ItemHome>()
-        var sale = arrayListOf<JsonObject>()
+        val homeArrayList = arrayListOf<ItemHome>()
+        val sale = arrayListOf<JsonObject>()
         var query = ""
 
         when (choice) {
@@ -161,7 +160,7 @@ class HomeFragment : Fragment() {
                                             sale.add(resultSet[r].asJsonObject)
                                             resultSet.remove(r)
                                         }
-                                        for ((c, i) in sale.withIndex()) {
+                                        for (i in sale) {
                                             val imageCall = object : ImageCallback {
                                                     override fun onDataReceived(data: Bitmap?) {
                                                         val p = Gson().fromJson(i, ProductModel::class.java)
@@ -215,8 +214,8 @@ class HomeFragment : Fragment() {
                     if(response.isSuccessful) {
                         Log.v("IMAGE", "Response successful")
                         if (response.body()!=null) {
-                            println(response.body()?.byteStream())
                             image = BitmapFactory.decodeStream(response.body()?.byteStream())
+                            println(image)
                             callback.onDataReceived(image)
                         }
                     } else {

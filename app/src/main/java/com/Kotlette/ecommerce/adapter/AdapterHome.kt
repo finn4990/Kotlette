@@ -12,11 +12,11 @@ import com.Kotlette.ecommerce.item.ItemHome
 class AdapterHome (private val homeList : ArrayList<ItemHome>) :
     RecyclerView.Adapter<AdapterHome.ViewHolderHome>() {
 
-    private lateinit var listener: onItemClickListener
-    interface onItemClickListener{
+    private lateinit var listener: OnItemClickListener
+    interface OnItemClickListener{
         fun onItemClick(position: Int)
     }
-    fun setOnItemClickListener(listener: onItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderHome {
@@ -35,7 +35,7 @@ class AdapterHome (private val homeList : ArrayList<ItemHome>) :
         holder.price.text = "Prezzo: " + currentItem.price
     }
 
-    class ViewHolderHome(itemView: View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolderHome(itemView: View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
         val title : TextView = itemView.findViewById(R.id.title_product)
         val image : ImageView = itemView.findViewById(R.id.image_product)
