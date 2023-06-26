@@ -72,11 +72,11 @@ class ProfileFragment : Fragment(), AdapterView.OnItemSelectedListener {
         getData(callback)
 
         binding.buttonPass.setOnClickListener {
-            val fragmentManager = getActivity()?.supportFragmentManager
+            val fragmentManager = activity?.supportFragmentManager
             val fragmentTransaction = fragmentManager?.beginTransaction()
 
             val myFragment = ChangePassFragment()
-            fragmentTransaction?.replace(R.id.frame_layout, myFragment)
+            fragmentTransaction?.replace(R.id.fragmentContainerView, myFragment)
             fragmentTransaction?.addToBackStack("fragment ChangPass")
             fragmentTransaction?.commit()
 

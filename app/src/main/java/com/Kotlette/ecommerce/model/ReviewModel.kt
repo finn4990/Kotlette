@@ -8,7 +8,7 @@ data class ReviewModel(
     val comment: String?,
 
     @SerializedName("Rating")
-    val rating: String?,
+    val rating: Double?,
 
     @SerializedName("UsernameR")
     val username: String?,

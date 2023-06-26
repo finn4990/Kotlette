@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.search -> replaceFragment(SearchFragment())
             R.id.account -> replaceFragment(ProfileFragment())
-            R.id.home -> replaceFragment(TransactionFragment())
+            R.id.home -> replaceFragment(HomeFragment())
             R.id.cart -> replaceFragment(CartFragment())
         }
         return super.onOptionsItemSelected(item)
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frame_layout,fragment)
+        fragmentTransaction.replace(R.id.fragmentContainerView,fragment)
         fragmentTransaction.addToBackStack("new fragment")
         fragmentTransaction.commit()
     }

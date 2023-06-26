@@ -2,47 +2,40 @@ package com.Kotlette.ecommerce.main
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.adapter.AdapterDetail
-import com.Kotlette.ecommerce.adapter.AdapterHome
 import com.Kotlette.ecommerce.clientweb.ClientNetwork
 import com.Kotlette.ecommerce.databinding.FragmentDetailBinding
 import com.Kotlette.ecommerce.file.FileManager
 import com.Kotlette.ecommerce.item.ItemDetail
 import com.Kotlette.ecommerce.item.ItemHome
 import com.Kotlette.ecommerce.model.ProductModel
+import com.Kotlette.ecommerce.model.ReviewModel
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.random.Random
 
 class DetailFragment : Fragment() {
 
     private lateinit var adapter : AdapterDetail
     private lateinit var recyclerView : RecyclerView
-    private lateinit var detailArrayList : ArrayList<ItemDetail>
-    private lateinit var product : ItemHome
+    private var product : ItemHome? = null
 
-    lateinit var comment: Array<String>
-    lateinit var iconUser: Array<Int>
-    lateinit var vote: Array<Double>
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,35 +48,47 @@ class DetailFragment : Fragment() {
         val binding = FragmentDetailBinding.inflate(inflater, container, false)
         val view = binding.root
         val data = context?.let { FileManager(it) }
-        var id :Int
 
         setFragmentResultListener("Product") { requestKey, bundle ->
             var id = bundle.getInt("bundleId")
             var title = bundle.getString("bundleTitle")
             var price = bundle.getDouble("bundlePrice")
-            var image = bundle.getString("bundleImage")
             product = ItemHome(id, title, null, price)
-            binding.titleProduct.text = product.title
+            binding.titleProduct.text = product?.title
+            binding.priceProduct.text = "Prezzo: " + product?.price.toString() + "€"
 
 
-            val callback = object : DetailCallback {
+            val callback1 = object : DetailCallback {
                 override fun onDataReceived(data: ArrayList<ItemDetail>) {}
                 override fun onImageReceived(image: Bitmap?) {
                     binding.imageProduct.setImageBitmap(image)
                 }
             }
 
-            getProduct(callback, 1, product.id!!)
+            getProduct(callback1, 1, product?.id!!)
+
+            val callback2 = object : DetailCallback {
+                override fun onDataReceived(data: ArrayList<ItemDetail>) {
+                    recyclerView = view.findViewById(R.id.recyclerView)
+                    recyclerView.layoutManager = LinearLayoutManager(context)
+                    recyclerView.setHasFixedSize(true)
+                    adapter = AdapterDetail(data)
+                    recyclerView.adapter = adapter
+                }
+                override fun onImageReceived(image: Bitmap?) {}
+            }
+
+            getProduct(callback2, 2, product?.id)
         }
 
 
         binding.buttonRate.setOnClickListener{
-            data?.writeToFile("Id.txt", "${product.id}")
-            val fragmentManager = getActivity()?.supportFragmentManager
+            data?.writeToFile("Id.txt", "${product?.id}")
+            val fragmentManager = activity?.supportFragmentManager
             val fragmentTransaction = fragmentManager?.beginTransaction()
 
             val myFragment = ReviewFragment()
-            fragmentTransaction?.replace(R.id.frame_layout, myFragment)
+            fragmentTransaction?.replace(R.id.fragmentContainerView, myFragment)
             fragmentTransaction?.addToBackStack("fragment Review")
             fragmentTransaction?.commit()
         }
@@ -95,10 +100,10 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //RecycleViewPopular
-        val callbackAll = object : DetailCallback {
+        val callback2 = object : DetailCallback {
             override fun onDataReceived(data: ArrayList<ItemDetail>) {
-                recyclerView = view.findViewById(R.id.recyclerViewAll)
-                recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                recyclerView = view.findViewById(R.id.recyclerView)
+                recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.setHasFixedSize(true)
                 adapter = AdapterDetail(data)
                 recyclerView.adapter = adapter
@@ -106,13 +111,14 @@ class DetailFragment : Fragment() {
             override fun onImageReceived(image: Bitmap?) {}
         }
 
+        getProduct(callback2, 2, product?.id)
+
 
     }
 
-    private fun getProduct(callback: DetailCallback, choice: Int, id: Int) {
+    private fun getProduct(callback: DetailCallback, choice: Int, id: Int?) {
 
-        val homeArrayList = arrayListOf<ItemDetail>()
-        val sale = arrayListOf<JsonObject>()
+        val detailArrayList = arrayListOf<ItemDetail>()
         var query = ""
 
         when (choice) {
@@ -137,20 +143,23 @@ class DetailFragment : Fragment() {
                                     getImage(resultSet[0].asJsonObject, imageCall)
                                 }
 
-                                2 -> {
-
+                                2 -> { for (result in resultSet) {
+                                        val p = Gson().fromJson(result, ReviewModel::class.java)
+                                        detailArrayList.add(ItemDetail(null, p.comment, p.rating))
+                                    }
+                                    callback.onDataReceived(detailArrayList)
                                 }
                             }
                         } else {
-                            callback.onDataReceived(homeArrayList) // Nessun risultato trovato
+                            callback.onDataReceived(detailArrayList) // Nessun risultato trovato
                         }
                     } else {
-                        callback.onDataReceived(homeArrayList) // Errore del server
+                        callback.onDataReceived(detailArrayList) // Errore del server
                     }
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    callback.onDataReceived(homeArrayList) // Impossibile raggiungere il server
+                    callback.onDataReceived(detailArrayList) // Impossibile raggiungere il server
                     Log.v("SELECT", "Response failed")
                 }
             }
@@ -158,37 +167,39 @@ class DetailFragment : Fragment() {
 
     }
 
-    private fun getImage(jsonObject: JsonObject, callback: ImageCallback) {
+    private fun getImage(jsonObject: JsonObject?, callback: ImageCallback) {
 
-        val url: String = jsonObject.get("ImageP").asString
+        val url: String? = jsonObject?.get("ImageP")?.asString
         println(url)
         var image: Bitmap? = null
 
-        ClientNetwork.retrofit.getAvatar(url).enqueue(
-            object : Callback<ResponseBody> {
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.v("IMAGE", "Response successful")
-                        if (response.body() != null) {
-                            image = BitmapFactory.decodeStream(response.body()?.byteStream())
-                            println(image)
+        if (url != null) {
+            ClientNetwork.retrofit.getAvatar(url).enqueue(
+                object : Callback<ResponseBody> {
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.v("IMAGE", "Response successful")
+                            if (response.body() != null) {
+                                image = BitmapFactory.decodeStream(response.body()?.byteStream())
+                                println(image)
+                                callback.onDataReceived(image)
+                            }
+                        } else {
+                            Log.v("IMAGE", "Response failed")
                             callback.onDataReceived(image)
                         }
-                    } else {
-                        Log.v("IMAGE", "Response failed")
-                        callback.onDataReceived(image)
                     }
-                }
 
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    callback.onDataReceived(image) // Impossibile raggiungere il server
-                }
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        callback.onDataReceived(image) // Impossibile raggiungere il server
+                    }
 
-            }
-        )
+                }
+            )
+        }
     }
 
     interface ImageCallback {

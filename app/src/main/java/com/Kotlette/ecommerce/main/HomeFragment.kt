@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.adapter.AdapterHome
 import com.Kotlette.ecommerce.clientweb.ClientNetwork
+import com.Kotlette.ecommerce.databinding.FragmentHomeBinding
 import com.Kotlette.ecommerce.item.ItemHome
 import com.Kotlette.ecommerce.model.ProductModel
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -37,6 +37,9 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerViewSale : RecyclerView
     private lateinit var recyclerViewAll : RecyclerView
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,7 +50,10 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        onCreate(savedInstanceState)
+        val binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+        //return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -106,7 +112,7 @@ class HomeFragment : Fragment() {
                         val fragmentManager = activity?.supportFragmentManager
                         val fragmentTransaction = fragmentManager?.beginTransaction()
 
-                        fragmentTransaction?.replace(R.id.frame_layout, DetailFragment())
+                        fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment())
                         fragmentTransaction?.addToBackStack("Fragment Detail")
                         fragmentTransaction?.commit()
                         Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()

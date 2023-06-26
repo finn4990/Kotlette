@@ -58,7 +58,7 @@ class ReviewFragment : Fragment() {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if(response.isSuccessful) {
                         Toast.makeText(requireContext(), "Review submit!", Toast.LENGTH_SHORT).show()
-                        requireActivity().supportFragmentManager.popBackStack()
+                        activity?.supportFragmentManager?.popBackStack()
                     }else{
                         Log.v("INSERT", "Error!")
                     }

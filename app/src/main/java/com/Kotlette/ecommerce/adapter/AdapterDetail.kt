@@ -31,7 +31,6 @@ class AdapterDetail (private val detailList : ArrayList<ItemDetail>) :
 
     class ViewHolderDetail(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val userIcon : ImageView = itemView.findViewById(R.id.user_icon)
         val comment : TextView = itemView.findViewById(R.id.comment)
         val rating : RatingBar = itemView.findViewById(R.id.ratingBar)
     }
