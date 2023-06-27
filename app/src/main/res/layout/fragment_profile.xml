@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            tools:srcCompat="@tools:sample/avatars"/>
+            app:srcCompat="@drawable/icon_user_image" />
 
     </androidx.cardview.widget.CardView>
 

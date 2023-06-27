@@ -50,7 +50,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        onCreate(savedInstanceState)
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
         //return inflater.inflate(R.layout.fragment_home, container, false)
@@ -73,7 +72,6 @@ class HomeFragment : Fragment() {
                         Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()
                     }
                 })
-
             }
         }
 

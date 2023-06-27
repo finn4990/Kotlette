@@ -31,6 +31,10 @@ import kotlin.random.Random
 
 class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
+    private lateinit var adapterCategory : AdapterHome
+
+    private var recyclerViewCategory : RecyclerView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,24 +64,108 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         return view
     }
-
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+    override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
 
         val category = FileManager(requireContext())
-        val Choice = parent.getItemAtPosition(pos).toString()
-        category.writeToFile("category.txt", Choice)
+        val choice = parent.getItemAtPosition(pos).toString()
+        category.writeToFile("category.txt", choice)
 
-        val fragmentManager = getActivity()?.supportFragmentManager
-        val fragmentTransaction = fragmentManager?.beginTransaction()
+        val callbackCategory = object : SearchCallback {
+            override fun onDataReceived(data: ArrayList<ItemHome>) {
+                recyclerViewCategory = view.findViewById(R.id.RecyclerViewCategory)
+                recyclerViewCategory?.layoutManager = LinearLayoutManager(context)
+                recyclerViewCategory?.setHasFixedSize(true)
+                adapterCategory = AdapterHome(data)
+                println("Adapter Info, $adapterCategory")
+                recyclerViewCategory?.adapter = adapterCategory
+            }
+        }
 
-        val myFragment = CatSearchFragment()
-        fragmentTransaction?.add(R.id.fragmentContainerView2, myFragment)
-        fragmentTransaction?.addToBackStack("fragment Category Search")
-        fragmentTransaction?.commit()
+        getList(callbackCategory, choice)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {
         // Another interface callback
+    }
+
+    fun getList(callback: SearchCallback, choice: String){
+        val categoryArrayList = arrayListOf<ItemHome>()
+
+        val fileCat = FileManager(requireContext())
+        val category = fileCat.readFromFile("category.txt")
+
+        val query = "SELECT PID, Pname, Price, ImageP, Description FROM Product WHERE Category = '${choice}'"
+
+        ClientNetwork.retrofit.select(query).enqueue(
+            object : Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if (response.isSuccessful) {
+                        Log.v("SELECT", "Response successful")
+                        val resultSet = response.body()?.getAsJsonArray("queryset")
+                        if (resultSet != null && resultSet.size() > 0) {
+                            for (result in resultSet) {
+                                val imageCall = object : ImageCallback {
+                                    override fun onDataReceived(data: Bitmap?) {
+                                        val p = Gson().fromJson(result, ProductModel::class.java)
+                                        categoryArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price, p.description))
+                                        adapterCategory.notifyDataSetChanged()
+                                    }
+                                }
+                                getImage(result.asJsonObject, imageCall)
+                            }
+                            callback.onDataReceived(categoryArrayList)
+                        } else {
+                            Log.v("SELECT", "No tuples on Transaction table")
+                            callback.onDataReceived(categoryArrayList)
+                        }
+                    } else {
+                        callback.onDataReceived(categoryArrayList)
+                    }
+                }
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    callback.onDataReceived(categoryArrayList)
+                    Log.v("SELECT", "Response failed")
+                }
+            }
+        )
+    }
+
+    private fun getImage(jsonObject: JsonObject, callback: ImageCallback) {
+
+        val url: String = jsonObject.get("ImageP").asString
+        println(url)
+        var image: Bitmap? = null
+
+        ClientNetwork.retrofit.getAvatar(url).enqueue(
+            object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if(response.isSuccessful) {
+                        Log.v("IMAGE", "Response successful")
+                        if (response.body()!=null) {
+                            println(response.body()?.byteStream())
+                            image = BitmapFactory.decodeStream(response.body()?.byteStream())
+                            callback.onDataReceived(image)
+                        }
+                    } else {
+                        Log.v("IMAGE", "Response failed")
+                        callback.onDataReceived(image)
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    callback.onDataReceived(image) // Impossibile raggiungere il server
+                }
+
+            }
+        )
+    }
+
+    interface SearchCallback {
+        fun onDataReceived(data: ArrayList<ItemHome>)
+    }
+
+    interface ImageCallback {
+        fun onDataReceived(data: Bitmap?)
     }
 
 }

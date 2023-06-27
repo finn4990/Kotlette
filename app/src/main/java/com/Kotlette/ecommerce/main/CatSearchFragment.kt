@@ -25,11 +25,14 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class CatSearchFragment : Fragment() {
+class CatSearchFragment() : Fragment() {
 
     private lateinit var adapterCategory : AdapterHome
 
     private lateinit var recyclerViewCategory : RecyclerView
+
+    private var prova = arrayListOf<ItemHome>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +43,24 @@ class CatSearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
+        val binding = FragmentCatSearchBinding.inflate(layoutInflater)
+        val view = binding.root
+
+        val callbackCategory = object : CatSearchCallback {
+
+            override fun onDataReceived(data: ArrayList<ItemHome>) {
+                recyclerViewCategory = view.findViewById(R.id.RecyclerViewCategory)
+                recyclerViewCategory.layoutManager = LinearLayoutManager(context)
+                recyclerViewCategory.setHasFixedSize(true)
+                adapterCategory = AdapterHome(prova)
+                recyclerViewCategory.adapter = adapterCategory
+            }
+        }
+
+        getList(callbackCategory)
+
         return inflater.inflate(R.layout.fragment_cat_search, container, false)
     }
 
@@ -50,28 +70,27 @@ class CatSearchFragment : Fragment() {
         val binding = FragmentCatSearchBinding.inflate(layoutInflater)
         val view = binding.root
 
-        val callbackCategory = object : CatSearchFragment.CatSearchCallback {
+        val callbackCategory = object : CatSearchCallback {
 
             override fun onDataReceived(data: ArrayList<ItemHome>) {
-                recyclerViewCategory = binding.RecyclerViewCategory
-                recyclerViewCategory .layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                recyclerViewCategory .setHasFixedSize(true)
-                adapterCategory = AdapterHome(data)
-                recyclerViewCategory .adapter = adapterCategory
-
+                recyclerViewCategory = view.findViewById(R.id.RecyclerViewCategory)
+                recyclerViewCategory.layoutManager = LinearLayoutManager(context)
+                recyclerViewCategory.setHasFixedSize(true)
+                adapterCategory = AdapterHome(prova)
+                recyclerViewCategory.adapter = adapterCategory
             }
         }
 
         getList(callbackCategory)
     }
 
-    fun getList(callback: CatSearchFragment.CatSearchCallback){
+    fun getList(callback: CatSearchCallback){
         var categoryArrayList = arrayListOf<ItemHome>()
 
         val fileCat = FileManager(requireContext())
         val category = fileCat.readFromFile("category.txt")
 
-        val query = "SELECT PID, Pname, Price, ImageP FROM Product WHERE Category = '${category}'"
+        val query = "SELECT PID, Pname, Price, ImageP, Description FROM Product WHERE Category = '${category}'"
 
         ClientNetwork.retrofit.select(query).enqueue(
             object : Callback<JsonObject> {
@@ -81,15 +100,18 @@ class CatSearchFragment : Fragment() {
                         val resultSet = response.body()?.getAsJsonArray("queryset")
                         if (resultSet != null && resultSet.size() > 0) {
                             for (result in resultSet) {
-                                val imageCall = object : CatSearchFragment.ImageCallback {
+                                val imageCall = object : ImageCallback {
                                     override fun onDataReceived(data: Bitmap?) {
                                         val p = Gson().fromJson(result, ProductModel::class.java)
                                         categoryArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price, p.description))
+                                        println("CategoryArray: $categoryArrayList")
                                         adapterCategory.notifyDataSetChanged()
+                                        callback.onDataReceived(categoryArrayList)
                                     }
                                 }
                                 getImage(result.asJsonObject, imageCall)
                             }
+                            callback.onDataReceived(categoryArrayList)
                         } else {
                             Log.v("SELECT", "No tuples on Transaction table")
                             callback.onDataReceived(categoryArrayList)
@@ -106,7 +128,7 @@ class CatSearchFragment : Fragment() {
         )
     }
 
-    private fun getImage(jsonObject: JsonObject, callback: CatSearchFragment.ImageCallback) {
+    private fun getImage(jsonObject: JsonObject, callback: ImageCallback) {
 
         val url: String = jsonObject.get("ImageP").asString
         println(url)

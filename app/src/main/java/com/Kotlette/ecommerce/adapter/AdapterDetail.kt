@@ -24,13 +24,14 @@ class AdapterDetail (private val detailList : ArrayList<ItemDetail>) :
 
     override fun onBindViewHolder(holder: ViewHolderDetail, position: Int) {
         val currentItem = detailList[position]
-        //holder.userIcon.setImageResource(R.drawable.)
+        holder.userIcon.setImageResource(R.drawable.icon_user_image)
         holder.comment.text = currentItem.comment
         holder.rating.rating = currentItem.ratingBar!!.toFloat()
     }
 
     class ViewHolderDetail(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        val userIcon : ImageView = itemView.findViewById(R.id.user_icon)
         val comment : TextView = itemView.findViewById(R.id.comment)
         val rating : RatingBar = itemView.findViewById(R.id.ratingBar)
     }
