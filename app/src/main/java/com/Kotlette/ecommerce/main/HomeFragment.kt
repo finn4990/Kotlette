@@ -103,16 +103,11 @@ class HomeFragment : Fragment() {
                 recyclerViewAll.adapter = adapterAll
                 adapterAll.setOnItemClickListener(object: AdapterHome.OnItemClickListener{
                     override fun onItemClick(position: Int) {
-                        setFragmentResult("Product", bundleOf(
-                            "bundleId" to data[position].id,
-                            "bundlePrice" to data[position].price,
-                            "bundleTitle" to data[position].title
-                            )
-                        )
+
                         val fragmentManager = activity?.supportFragmentManager
                         val fragmentTransaction = fragmentManager?.beginTransaction()
 
-                        fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment())
+                        fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(data[position]))
                         fragmentTransaction?.addToBackStack("Fragment Detail")
                         fragmentTransaction?.commit()
                         Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()
@@ -135,9 +130,9 @@ class HomeFragment : Fragment() {
         var query = ""
 
         when (choice) {
-            1 -> query = "select PID, Pname, Price, ImageP from Product ORDER BY Quantity DESC;"
-            2, 3 -> query = "select PID, Pname, Price, ImageP from Product;"
-            4 -> query = "select PID, Pname, Price, ImageP from Product;"
+            1 -> query = "select PID, Pname, Price, ImageP, Description from Product ORDER BY Quantity DESC;"
+            2, 3 -> query = "select PID, Pname, Price, ImageP, Description from Product;"
+            4 -> query = "select PID, Pname, Price, ImageP, Description from Product;"
         }
 
 
@@ -153,7 +148,7 @@ class HomeFragment : Fragment() {
                                         val imageCall = object : ImageCallback {
                                             override fun onDataReceived(data: Bitmap?) {
                                                 val p = Gson().fromJson(resultSet[i], ProductModel::class.java)
-                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price))
+                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price, p.description))
                                                 adapterPopular.notifyDataSetChanged()
                                             }
                                         }
@@ -171,7 +166,7 @@ class HomeFragment : Fragment() {
                                                     override fun onDataReceived(data: Bitmap?) {
                                                         val p = Gson().fromJson(i, ProductModel::class.java)
                                                         println(p.price)
-                                                        homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100-20))?.div(100)))
+                                                        homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100-20))?.div(100), p.description))
                                                         adapterSale.notifyDataSetChanged()
                                                     }
                                                 }
@@ -183,7 +178,7 @@ class HomeFragment : Fragment() {
                                         val imageCall = object : ImageCallback {
                                             override fun onDataReceived(data: Bitmap?) {
                                                 val p = Gson().fromJson(result, ProductModel::class.java)
-                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price))
+                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price, p.description))
                                                 adapterAll.notifyDataSetChanged()
                                             }
                                         }

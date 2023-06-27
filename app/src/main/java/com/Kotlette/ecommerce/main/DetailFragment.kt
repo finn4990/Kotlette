@@ -15,6 +15,7 @@ import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.adapter.AdapterDetail
 import com.Kotlette.ecommerce.clientweb.ClientNetwork
 import com.Kotlette.ecommerce.databinding.FragmentDetailBinding
+import com.Kotlette.ecommerce.databinding.FragmentProfileBinding
 import com.Kotlette.ecommerce.file.FileManager
 import com.Kotlette.ecommerce.item.ItemDetail
 import com.Kotlette.ecommerce.item.ItemHome
@@ -27,11 +28,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailFragment : Fragment() {
+class DetailFragment(private val product: ItemHome) : Fragment() {
 
     private lateinit var adapter : AdapterDetail
     private lateinit var recyclerView : RecyclerView
-    private var product : ItemHome? = null
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -45,42 +45,14 @@ class DetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentDetailBinding.inflate(inflater, container, false)
+        val binding = FragmentDetailBinding.inflate(layoutInflater)
         val view = binding.root
         val data = context?.let { FileManager(it) }
 
-        setFragmentResultListener("Product") { requestKey, bundle ->
-            var id = bundle.getInt("bundleId")
-            var title = bundle.getString("bundleTitle")
-            var price = bundle.getDouble("bundlePrice")
-            product = ItemHome(id, title, null, price)
-            binding.titleProduct.text = product?.title
-            binding.priceProduct.text = "Prezzo: " + product?.price.toString() + "€"
-
-
-            val callback1 = object : DetailCallback {
-                override fun onDataReceived(data: ArrayList<ItemDetail>) {}
-                override fun onImageReceived(image: Bitmap?) {
-                    binding.imageProduct.setImageBitmap(image)
-                }
-            }
-
-            getProduct(callback1, 1, product?.id!!)
-
-            val callback2 = object : DetailCallback {
-                override fun onDataReceived(data: ArrayList<ItemDetail>) {
-                    recyclerView = view.findViewById(R.id.recyclerView)
-                    recyclerView.layoutManager = LinearLayoutManager(context)
-                    recyclerView.setHasFixedSize(true)
-                    adapter = AdapterDetail(data)
-                    recyclerView.adapter = adapter
-                }
-                override fun onImageReceived(image: Bitmap?) {}
-            }
-
-            getProduct(callback2, 2, product?.id)
-        }
-
+        binding.imageProduct.setImageBitmap(product?.image)
+        binding.titleProduct.text = product?.title
+        binding.priceProduct.text = "Prezzo: " + product?.price.toString() + "€"
+        binding.description.text = product?.description
 
         binding.buttonRate.setOnClickListener{
             data?.writeToFile("Id.txt", "${product?.id}")
@@ -99,7 +71,7 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //RecycleViewPopular
+        //RecycleView
         val callback2 = object : DetailCallback {
             override fun onDataReceived(data: ArrayList<ItemDetail>) {
                 recyclerView = view.findViewById(R.id.recyclerView)

@@ -16,7 +16,7 @@ data class ProductModel(
     @SerializedName("Category")
     val category: String?,
 
-    @SerializedName("Decription")
+    @SerializedName("Description")
     val description: String?,
 
     @SerializedName("Value")

@@ -35,8 +35,9 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragmentContainerView,fragment)
+        fragmentTransaction.add(R.id.fragmentContainerView,fragment)
         fragmentTransaction.addToBackStack("new fragment")
+        fragmentTransaction.replace(R.id.fragmentContainerView,fragment)
         fragmentTransaction.commit()
     }
 
