@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.adapter.AdapterCart
+import com.Kotlette.ecommerce.databinding.FragmentCartBinding
 import com.Kotlette.ecommerce.item.ItemCart
+import com.Kotlette.ecommerce.item.SingletonCart
 
 class CartFragment : Fragment() {
 
@@ -29,70 +31,18 @@ class CartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart, container, false)
+        val binding = FragmentCartBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dataInitialize()
 
-        //RecycleViewPopular
-        recyclerView = view.findViewById(R.id.recyclerView)
+        //RecyclerViewCart
+        recyclerView = view.findViewById(R.id.recyclerViewCart)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        adapter = AdapterCart(cartArrayList)
+        adapter = AdapterCart(SingletonCart.getCart())
         recyclerView.adapter = adapter
-
-
-    }
-
-    private fun dataInitialize() {
-
-        cartArrayList = arrayListOf<ItemCart>()
-
-        title = arrayOf(
-            "Via Badia 9",
-            "Via Tiepolo 15",
-            "Piazza Navona 45A",
-            "Srada Longevo 8",
-            "Viale Regione Siciliana 77",
-            "Via Cordova 6",
-            "Via M. De Cervantes 2",
-            "Piazza A. Arrigo 4",
-            "Via Badia 9",
-            "Via Tiepolo 15",
-            "Piazza Navona 45A",
-            "Srada Longevo 8",
-            "Viale Regione Siciliana 77",
-            "Via Cordova 6",
-            "Via M. De Cervantes 2",
-            "Piazza A. Arrigo 4"
-        )
-
-        iconProduct = arrayOf(
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24,
-            R.drawable.ic_baseline_home_24
-        )
-
-        for(i in title.indices){
-
-            val cart = ItemCart(iconProduct[i], title[i])
-            cartArrayList.add(cart)
-        }
-
     }
 }

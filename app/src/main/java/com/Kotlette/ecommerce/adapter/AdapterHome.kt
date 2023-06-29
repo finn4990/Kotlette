@@ -38,7 +38,7 @@ class AdapterHome (private val homeList : ArrayList<ItemHome>) :
     class ViewHolderHome(itemView: View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
         val title : TextView = itemView.findViewById(R.id.title_product)
-        val image : ImageView = itemView.findViewById(R.id.image_product)
+        val image : ImageView = itemView.findViewById(R.id.image_product_cart)
         val price : TextView = itemView.findViewById(R.id.price_product)
 
         init {

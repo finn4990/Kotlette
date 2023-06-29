@@ -18,7 +18,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/image_product"
+            android:id="@+id/image_product_cart"
             android:layout_width="match_parent"
             android:layout_height="128dp"
             tools:srcCompat="@tools:sample/avatars" />

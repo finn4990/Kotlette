@@ -8,18 +8,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.setFragmentResultListener
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.adapter.AdapterDetail
 import com.Kotlette.ecommerce.clientweb.ClientNetwork
 import com.Kotlette.ecommerce.databinding.FragmentDetailBinding
-import com.Kotlette.ecommerce.databinding.FragmentProfileBinding
 import com.Kotlette.ecommerce.file.FileManager
+import com.Kotlette.ecommerce.item.ItemCart
 import com.Kotlette.ecommerce.item.ItemDetail
 import com.Kotlette.ecommerce.item.ItemHome
-import com.Kotlette.ecommerce.model.ProductModel
+import com.Kotlette.ecommerce.item.SingletonCart
 import com.Kotlette.ecommerce.model.ReviewModel
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -65,6 +65,12 @@ class DetailFragment(private val product: ItemHome) : Fragment() {
             fragmentTransaction?.commit()
         }
 
+        binding.addCart.setOnClickListener{
+            SingletonCart.addToCart(ItemCart(product.id, product.title, product.image, product.price, 1))
+            Toast.makeText(context,"Item added to the cart", Toast.LENGTH_SHORT).show()
+            SingletonCart.printCart()
+        }
+
         return view
     }
 
@@ -74,7 +80,7 @@ class DetailFragment(private val product: ItemHome) : Fragment() {
         //RecycleView
         val callback2 = object : DetailCallback {
             override fun onDataReceived(data: ArrayList<ItemDetail>) {
-                recyclerView = view.findViewById(R.id.recyclerView)
+                recyclerView = view.findViewById(R.id.recyclerViewCart)
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.setHasFixedSize(true)
                 adapter = AdapterDetail(data)

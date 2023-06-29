@@ -1,4 +1,5 @@
 package com.Kotlette.ecommerce.item
 
-class ItemCart (val iconProduct : Int, val title : String) {
-}
+import android.graphics.Bitmap
+
+class ItemCart(val code: Int?, val title: String?, val image: Bitmap?, val price: Double?, var qty: Int)

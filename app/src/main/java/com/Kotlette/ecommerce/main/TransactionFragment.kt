@@ -47,7 +47,7 @@ class TransactionFragment : Fragment() {
 
             override fun onDataReceived(data: ArrayList<ItemTransaction>) {
                 val layoutManager = LinearLayoutManager(context)
-                recyclerView = view.findViewById(R.id.recyclerView)
+                recyclerView = view.findViewById(R.id.recyclerViewCart)
                 recyclerView.layoutManager = layoutManager
                 recyclerView.setHasFixedSize(true)
                 adapter = AdapterTransaction(data)

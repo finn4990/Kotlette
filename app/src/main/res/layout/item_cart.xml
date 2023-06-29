@@ -17,7 +17,7 @@
             tools:ignore="UselessParent">
 
             <ImageView
-                android:id="@+id/image_product"
+                android:id="@+id/image_product_cart"
                 android:layout_width="128dp"
                 android:layout_height="128dp"
                 tools:srcCompat="@tools:sample/avatars" />
@@ -41,7 +41,7 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/quantity"
+                    android:id="@+id/quantity_cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="85dp"
@@ -68,11 +68,11 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/price"
+                    android:id="@+id/price_product_cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Price: "
-                    app:layout_constraintBottom_toTopOf="@+id/quantity"
+                    app:layout_constraintBottom_toTopOf="@+id/quantity_cart"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/title_product" />
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/remove_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Remove" />
