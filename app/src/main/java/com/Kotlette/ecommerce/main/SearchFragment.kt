@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.Kotlette.ecommerce.R
@@ -64,6 +65,35 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val callbackCategory = object : SearchCallback {
+            override fun onDataReceived(data: ArrayList<ItemHome>) {
+                recyclerViewCategory = view.findViewById(R.id.RecyclerViewCategory)
+                recyclerViewCategory?.layoutManager = LinearLayoutManager(context)
+                recyclerViewCategory?.setHasFixedSize(true)
+                adapterCategory = AdapterHome(data)
+                println("Adapter Info, $adapterCategory")
+                recyclerViewCategory?.adapter = adapterCategory
+                adapterCategory.setOnItemClickListener(object: AdapterHome.OnItemClickListener{
+                    override fun onItemClick(position: Int) {
+
+                        val fragmentManager = activity?.supportFragmentManager
+                        val fragmentTransaction = fragmentManager?.beginTransaction()
+
+                        fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(data[position]))
+                        fragmentTransaction?.addToBackStack("Fragment Detail")
+                        fragmentTransaction?.commit()
+                        Toast.makeText(context,"Clicked an Item", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+        }
+
+        getList(callbackCategory)
+    }
     override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
 
         val category = FileManager(requireContext())
@@ -78,23 +108,35 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 adapterCategory = AdapterHome(data)
                 println("Adapter Info, $adapterCategory")
                 recyclerViewCategory?.adapter = adapterCategory
+                adapterCategory.setOnItemClickListener(object: AdapterHome.OnItemClickListener{
+                    override fun onItemClick(position: Int) {
+
+                        val fragmentManager = activity?.supportFragmentManager
+                        val fragmentTransaction = fragmentManager?.beginTransaction()
+
+                        fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(data[position]))
+                        fragmentTransaction?.addToBackStack("Fragment Detail")
+                        fragmentTransaction?.commit()
+                        Toast.makeText(context,"Clicked an Item", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
         }
 
-        getList(callbackCategory, choice)
+        getList(callbackCategory)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {
         // Another interface callback
     }
 
-    fun getList(callback: SearchCallback, choice: String){
+    fun getList(callback: SearchCallback){
         val categoryArrayList = arrayListOf<ItemHome>()
 
         val fileCat = FileManager(requireContext())
         val category = fileCat.readFromFile("category.txt")
 
-        val query = "SELECT PID, Pname, Price, ImageP, Description FROM Product WHERE Category = '${choice}'"
+        val query = "SELECT PID, Pname, Price, ImageP, Description FROM Product WHERE Category = '${category}'"
 
         ClientNetwork.retrofit.select(query).enqueue(
             object : Callback<JsonObject> {
@@ -142,7 +184,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     if(response.isSuccessful) {
                         Log.v("IMAGE", "Response successful")
                         if (response.body()!=null) {
-                            println(response.body()?.byteStream())
+                            //println(response.body()?.byteStream())
                             image = BitmapFactory.decodeStream(response.body()?.byteStream())
                             callback.onDataReceived(image)
                         }
