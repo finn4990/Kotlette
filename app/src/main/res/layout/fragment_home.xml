@@ -1,56 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/popular_products"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:text="Most Popular" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewPopular"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:reverseLayout="true"
-        />
+        <TextView
+            android:id="@+id/popular_products"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="@string/PopularProducts" />
 
-    <TextView
-        android:id="@+id/sale_products"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:text="Daily Sale"
-        android:layout_marginTop="48dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewPopular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:reverseLayout="true"
+            />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewSale"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:reverseLayout="true" />
+        <TextView
+            android:id="@+id/sale_products"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="@string/SaleProducts"
+            android:layout_marginTop="48dp"/>
 
-    <TextView
-        android:id="@+id/all_products"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:text="All Products"
-        android:layout_marginTop="48dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:reverseLayout="true" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:reverseLayout="true" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/all_products"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="@string/AllProducts"
+            android:layout_marginTop="48dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewAll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:reverseLayout="true" />
+
+        <TextView
+            android:id="@+id/category_products"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="@string/CategoryProducts"
+            android:layout_marginTop="48dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:reverseLayout="true" />
+
+    </LinearLayout>
+
+</ScrollView>

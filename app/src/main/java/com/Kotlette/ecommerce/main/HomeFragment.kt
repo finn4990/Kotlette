@@ -17,6 +17,7 @@ import com.Kotlette.ecommerce.R
 import com.Kotlette.ecommerce.adapter.AdapterHome
 import com.Kotlette.ecommerce.clientweb.ClientNetwork
 import com.Kotlette.ecommerce.databinding.FragmentHomeBinding
+import com.Kotlette.ecommerce.file.FileManager
 import com.Kotlette.ecommerce.item.ItemHome
 import com.Kotlette.ecommerce.model.ProductModel
 import com.google.gson.Gson
@@ -32,10 +33,12 @@ class HomeFragment : Fragment() {
     private lateinit var adapterPopular : AdapterHome
     private lateinit var adapterSale : AdapterHome
     private lateinit var adapterAll : AdapterHome
+    private lateinit var adapterCategory : AdapterHome
 
     private lateinit var recyclerViewPopular : RecyclerView
     private lateinit var recyclerViewSale : RecyclerView
     private lateinit var recyclerViewAll : RecyclerView
+    private lateinit var recyclerViewCategory : RecyclerView
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -69,7 +72,14 @@ class HomeFragment : Fragment() {
                 recyclerViewPopular.adapter = adapterPopular
                 adapterPopular.setOnItemClickListener(object: AdapterHome.OnItemClickListener{
                     override fun onItemClick(position: Int) {
-                        Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()
+
+                        val fragmentManager = activity?.supportFragmentManager
+                        val fragmentTransaction = fragmentManager?.beginTransaction()
+
+                        fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(data[position]))
+                        fragmentTransaction?.addToBackStack("Fragment Detail")
+                        fragmentTransaction?.commit()
+                        Toast.makeText(context,"Clicked an Item Popular",Toast.LENGTH_SHORT).show()
                     }
                 })
             }
@@ -85,7 +95,14 @@ class HomeFragment : Fragment() {
                 recyclerViewSale.adapter = adapterSale
                 adapterSale.setOnItemClickListener(object: AdapterHome.OnItemClickListener{
                     override fun onItemClick(position: Int) {
-                        Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()
+
+                        val fragmentManager = activity?.supportFragmentManager
+                        val fragmentTransaction = fragmentManager?.beginTransaction()
+
+                        fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(data[position]))
+                        fragmentTransaction?.addToBackStack("Fragment Detail")
+                        fragmentTransaction?.commit()
+                        Toast.makeText(context,"Clicked an Item Sale",Toast.LENGTH_SHORT).show()
                     }
                 })
             }
@@ -108,7 +125,31 @@ class HomeFragment : Fragment() {
                         fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(data[position]))
                         fragmentTransaction?.addToBackStack("Fragment Detail")
                         fragmentTransaction?.commit()
-                        Toast.makeText(context,"Clicked an Item",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"Clicked an Item All",Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
+        }
+
+        //RecycleViewCategory
+        val callbackCategory = object : HomeCallback {
+            override fun onDataReceived(data: ArrayList<ItemHome>) {
+                recyclerViewCategory = view.findViewById(R.id.recyclerViewCategory)
+                recyclerViewCategory.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                recyclerViewCategory.setHasFixedSize(true)
+                adapterCategory = AdapterHome(data)
+                recyclerViewCategory.adapter = adapterCategory
+                adapterCategory.setOnItemClickListener(object: AdapterHome.OnItemClickListener{
+                    override fun onItemClick(position: Int) {
+
+                        val fragmentManager = activity?.supportFragmentManager
+                        val fragmentTransaction = fragmentManager?.beginTransaction()
+
+                        fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(data[position]))
+                        fragmentTransaction?.addToBackStack("Fragment Detail")
+                        fragmentTransaction?.commit()
+                        Toast.makeText(context,"Clicked an Item Category",Toast.LENGTH_SHORT).show()
                     }
                 })
             }
@@ -118,19 +159,22 @@ class HomeFragment : Fragment() {
         getProduct(callbackPopular, 1)
         getProduct(callbackSale, 2)
         getProduct(callbackAll, 3)
+        getProduct(callbackCategory, 4)
 
     }
 
     private fun getProduct(callback: HomeCallback, choice: Int) {
 
+        val data = context?.let { FileManager(it) }
+        val category = data?.readFromFile("favorite.txt")
         val homeArrayList = arrayListOf<ItemHome>()
-        val sale = arrayListOf<JsonObject>()
         var query = ""
 
         when (choice) {
-            1 -> query = "select PID, Pname, Price, ImageP, Description from Product ORDER BY Quantity DESC;"
-            2, 3 -> query = "select PID, Pname, Price, ImageP, Description from Product;"
-            4 -> query = "select PID, Pname, Price, ImageP, Description from Product;"
+            1 -> query = "select PID, Pname, Price, ImageP, Description, Sale from Product ORDER BY Quantity;"
+            2 -> query = "select PID, Pname, Price, ImageP, Description, Sale from Product WHERE Sale > 0;"
+            3 -> query = "select PID, Pname, Price, ImageP, Description, Sale from Product;"
+            4 -> query = "select PID, Pname, Price, ImageP, Description, Sale from Product WHERE Category = '${category}';"
         }
 
 
@@ -146,42 +190,35 @@ class HomeFragment : Fragment() {
                                         val imageCall = object : ImageCallback {
                                             override fun onDataReceived(data: Bitmap?) {
                                                 val p = Gson().fromJson(resultSet[i], ProductModel::class.java)
-                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price, p.description))
+                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100- p.sale!!))?.div(100), p.description))
                                                 adapterPopular.notifyDataSetChanged()
                                             }
                                         }
                                         getImage(resultSet[i].asJsonObject, imageCall)
                                     }
-
-                                2 -> {
-                                        for (i in 0..4) {
-                                            var r = Random.nextInt(resultSet.size())
-                                            sale.add(resultSet[r].asJsonObject)
-                                            resultSet.remove(r)
-                                        }
-                                        for (i in sale) {
-                                            val imageCall = object : ImageCallback {
-                                                    override fun onDataReceived(data: Bitmap?) {
-                                                        val p = Gson().fromJson(i, ProductModel::class.java)
-                                                        println(p.price)
-                                                        homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100-20))?.div(100), p.description))
-                                                        adapterSale.notifyDataSetChanged()
-                                                    }
-                                                }
-                                            getImage(i, imageCall)
-                                        }
-                                }
-
-                                3 -> for (result in resultSet) {
+                                2, 3 -> for (result in resultSet) {
                                         val imageCall = object : ImageCallback {
                                             override fun onDataReceived(data: Bitmap?) {
                                                 val p = Gson().fromJson(result, ProductModel::class.java)
-                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price, p.description))
-                                                adapterAll.notifyDataSetChanged()
+                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100- p.sale!!))?.div(100), p.description))
+                                                if(choice == 2)
+                                                    adapterSale.notifyDataSetChanged()
+                                                if(choice == 3)
+                                                    adapterAll.notifyDataSetChanged()
                                             }
                                         }
                                         getImage(result.asJsonObject, imageCall)
                                     }
+                                4 -> for (result in resultSet) {
+                                    val imageCall = object : ImageCallback {
+                                        override fun onDataReceived(data: Bitmap?) {
+                                            val p = Gson().fromJson(result, ProductModel::class.java)
+                                            homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100- p.sale!!))?.div(100), p.description))
+                                            adapterCategory.notifyDataSetChanged()
+                                        }
+                                    }
+                                    getImage(result.asJsonObject, imageCall)
+                                }
                             }
                             callback.onDataReceived(homeArrayList)
                         } else {

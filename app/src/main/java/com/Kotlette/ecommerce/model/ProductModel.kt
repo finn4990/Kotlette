@@ -26,5 +26,8 @@ data class ProductModel(
     val price: Double?,
 
     @SerializedName("ImageP")
-    val image: String?
+    val image: String?,
+
+    @SerializedName("Sale")
+    val sale: Int?
 )

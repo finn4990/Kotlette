@@ -41,6 +41,7 @@ class AdapterHome (private val homeList : ArrayList<ItemHome>) :
         val image : ImageView = itemView.findViewById(R.id.image_product_cart)
         val price : TextView = itemView.findViewById(R.id.price_product)
 
+
         init {
             itemView.setOnClickListener{
                 listener.onItemClick(adapterPosition)

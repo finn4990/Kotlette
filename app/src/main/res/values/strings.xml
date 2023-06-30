@@ -23,4 +23,8 @@
     <string name="Review">Write a review</string>
     <string name="SendRvw">Submit review</string>
     <string name="SeaCat">Search for category</string>
+    <string name="PopularProducts">Popular Products</string>
+    <string name="SaleProducts">Sale Products</string>
+    <string name="AllProducts">All Products</string>
+    <string name="CategoryProducts">Category Products</string>
 </resources>
