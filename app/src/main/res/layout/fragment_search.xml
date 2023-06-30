@@ -6,25 +6,24 @@
     android:orientation="vertical"
     tools:context=".main.SearchFragment">
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+    <EditText
+        android:id="@+id/editTextSearch"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/Search"
+        android:inputType="text"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="150dp" />
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="-100dp"/>
 
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:hint="@string/SeaCat" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RecyclerViewCategory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/buttonSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Submit"
+        android:layout_marginTop="220dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@drawable/loginbutton"/>
 
 
 </LinearLayout>

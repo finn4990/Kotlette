@@ -27,4 +27,6 @@
     <string name="SaleProducts">Sale Products</string>
     <string name="AllProducts">All Products</string>
     <string name="CategoryProducts">Category Products</string>
+    <string name="Search">Search product name</string>
+    <string name="Submit">Submit</string>
 </resources>

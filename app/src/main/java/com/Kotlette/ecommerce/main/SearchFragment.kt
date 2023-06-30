@@ -22,6 +22,7 @@ import com.Kotlette.ecommerce.file.FileManager
 import com.Kotlette.ecommerce.item.ItemHome
 import com.Kotlette.ecommerce.model.ProductModel
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -30,11 +31,11 @@ import retrofit2.Response
 import kotlin.random.Random
 
 
-class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class SearchFragment : Fragment(){
 
-    private lateinit var adapterCategory : AdapterHome
+    /*private lateinit var adapterCategory : AdapterHome
 
-    private var recyclerViewCategory : RecyclerView? = null
+    private var recyclerViewCategory : RecyclerView? = null*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +50,17 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val binding = FragmentSearchBinding.inflate(layoutInflater)
         val view = binding.root
 
-        val spinner: Spinner = binding.spinner
+        binding.buttonSearch.setOnClickListener {
+            val productName = binding.editTextSearch.text.toString()
+
+            if(productName.isNotBlank()){
+                searchProduct(productName)
+            } else{
+                Toast.makeText(requireContext(), "Fill all the fields", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        /*val spinner: Spinner = binding.spinner
         context?.let {
             ArrayAdapter.createFromResource(
                 it,
@@ -61,12 +72,51 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
 
             spinner.onItemSelectedListener = this
-        }
+        }*/
 
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    fun searchProduct(name : String){
+        val query = "SELECT * FROM Product WHERE Pname = '${name}';"
+
+        ClientNetwork.retrofit.select(query).enqueue(
+            object : Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    if (response.isSuccessful) {
+                        if ((response.body()?.get("queryset") as JsonArray).size() == 1) {
+                            val result = response.body()?.getAsJsonArray("queryset")
+                            val imageCall = object : HomeFragment.ImageCallback {
+                                override fun onDataReceived(data: Bitmap?) {
+                                    val p = Gson().fromJson(result, ProductModel::class.java)
+                                    val product = ItemHome(p.code?.toInt(), p.name, data, p.price, p.description)
+
+                                    val fragmentManager = activity?.supportFragmentManager
+                                    val fragmentTransaction = fragmentManager?.beginTransaction()
+
+                                    fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(product))
+                                    fragmentTransaction?.addToBackStack("Fragment Detail")
+                                    fragmentTransaction?.commit()
+                                }
+                            }
+
+                        } else {
+                            Toast.makeText(requireContext(), "Wrong product name", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Log.v("SELECT", "Server error")
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    Log.v("SELECT", "Can't reach the server")
+
+                }
+            }
+        )
+    }
+
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val callbackCategory = object : SearchCallback {
@@ -170,7 +220,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
             }
         )
-    }
+    }*/
 
     private fun getImage(jsonObject: JsonObject, callback: ImageCallback) {
 
