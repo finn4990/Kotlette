@@ -82,6 +82,17 @@ class ProfileFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         }
 
+        binding.buttonTransaction.setOnClickListener {
+            val fragmentManager = activity?.supportFragmentManager
+            val fragmentTransaction = fragmentManager?.beginTransaction()
+
+            val myFragment = TransactionFragment()
+            fragmentTransaction?.replace(R.id.fragmentContainerView, myFragment)
+            fragmentTransaction?.addToBackStack("fragment Transaction")
+            fragmentTransaction?.commit()
+
+        }
+
         return view
     }
 

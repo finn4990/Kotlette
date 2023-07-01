@@ -70,9 +70,18 @@
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="230dp"
         android:backgroundTint="@drawable/changebutton"
         android:text="@string/ChangePass" />
+
+    <Button
+        android:id="@+id/buttonTransaction"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="300dp"
+        android:backgroundTint="@drawable/changebutton"
+        android:text="@string/Transaction" />
 
 
 

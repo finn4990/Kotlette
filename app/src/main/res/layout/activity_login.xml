@@ -15,68 +15,86 @@
         android:name="com.Kotlette.ecommerce.login.LoginFragment" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/Cl1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/Cl1">
+        android:layout_height="match_parent">
 
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="63dp"
+            android:layout_marginBottom="48dp"
             android:gravity="center"
             android:hint="@string/LogAcc"
+            app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageIcon"
+            android:layout_width="118dp"
+            android:layout_height="84dp"
+            android:layout_marginBottom="92dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewWelcome" />
+            app:srcCompat="@drawable/main_icon1" />
 
         <TextView
             android:id="@+id/textViewWelcome"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="70dp"
+            android:layout_marginBottom="60dp"
             android:fontFamily="sans-serif"
             android:gravity="center"
             android:hint="@string/Welcome"
             android:textColorHint="@color/Tavolozza2"
             android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.955" />
 
         <Button
             android:id="@+id/buttonLogin"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginBottom="44dp"
             android:backgroundTint="@drawable/loginbutton"
             android:hint="@string/Login"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintBottom_toTopOf="@+id/textView3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="51dp"
+            android:layout_marginBottom="32dp"
             android:gravity="center"
             android:hint="@string/RegAcc"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
+            app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/buttonRegister"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="31dp"
+            android:layout_marginBottom="92dp"
             android:backgroundTint="@drawable/loginbutton"
             android:hint="@string/Register"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
