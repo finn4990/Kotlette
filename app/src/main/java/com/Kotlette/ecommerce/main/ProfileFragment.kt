@@ -35,6 +35,7 @@ class ProfileFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val binding = FragmentProfileBinding.inflate(layoutInflater)
         val view = binding.root
 
+        // Inizializza il selettore spinner
         val spinner: Spinner = binding.spinner
         context?.let {
             ArrayAdapter.createFromResource(
@@ -47,21 +48,25 @@ class ProfileFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         }
 
+        // Lister della selezione dello spinner
         spinner.onItemSelectedListener = this
 
 
 
-
+        // Callback per il recupero dei dati
         val callback = object : DataCallback {
             override fun onDataReceived(data: String?) {
+                // Estrae i dati ricevuti (username e payMethod) dalla stringa
                 val username = data?.split(" ")?.get(0)
                 val payMethod = data?.split(" ")?.get(1)
 
                 println(username)
 
+                // Legge l'email dal file
                 val data = context?.let { FileManager(it) }
                 val email = data?.readFromFile("Email.txt")
 
+                // Aggiorna le visualizzazioni con i dati ricevuti
                 binding.textViewU.text = username
                 binding.textViewE.text = email
                 binding.textViewM.text = payMethod
@@ -71,6 +76,7 @@ class ProfileFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         getData(callback)
 
+        // Gestisce il click sul pulsante per cambiare password
         binding.buttonPass.setOnClickListener {
             val fragmentManager = activity?.supportFragmentManager
             val fragmentTransaction = fragmentManager?.beginTransaction()
@@ -82,6 +88,7 @@ class ProfileFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         }
 
+        // Gestisce il click sul pulsante per le transazioni
         binding.buttonTransaction.setOnClickListener {
             val fragmentManager = activity?.supportFragmentManager
             val fragmentTransaction = fragmentManager?.beginTransaction()

@@ -33,10 +33,6 @@ import kotlin.random.Random
 
 class SearchFragment : Fragment(){
 
-    /*private lateinit var adapterCategory : AdapterHome
-
-    private var recyclerViewCategory : RecyclerView? = null*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -50,6 +46,7 @@ class SearchFragment : Fragment(){
         val binding = FragmentSearchBinding.inflate(layoutInflater)
         val view = binding.root
 
+        // Gestisce il click sul pulsante di ricerca
         binding.buttonSearch.setOnClickListener {
             val productName = binding.editTextSearch.text.toString()
 
@@ -60,34 +57,24 @@ class SearchFragment : Fragment(){
             }
         }
 
-        /*val spinner: Spinner = binding.spinner
-        context?.let {
-            ArrayAdapter.createFromResource(
-                it,
-                R.array.Category,
-                android.R.layout.simple_spinner_item
-            ).also { adapter ->
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinner.adapter = adapter
-            }
-
-            spinner.onItemSelectedListener = this
-        }*/
-
         return view
     }
 
     fun searchProduct(name : String){
+        // Query per selezionare il prodotto con il nome specificato
         val query = "SELECT * FROM Product WHERE Pname = '${name}';"
 
+        // Esegue la query sul server tramite Retrofit
         ClientNetwork.retrofit.select(query).enqueue(
             object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful) {
                         if ((response.body()?.get("queryset") as JsonArray).size() == 1) {
                             val result = response.body()?.getAsJsonArray("queryset")
+                            // Callback per il recupero dell'immagine del prodotto
                             val imageCall = object : ImageCallback {
                                 override fun onDataReceived(data: Bitmap?) {
+                                    // Callback per il recupero del prodotto completo
                                     val productCall = object : SearchCallback {
                                         override fun onDataReceived(product: ItemHome) {
                                             val fragmentManager = activity?.supportFragmentManager
@@ -118,112 +105,6 @@ class SearchFragment : Fragment(){
             }
         )
     }
-
-    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val callbackCategory = object : SearchCallback {
-            override fun onDataReceived(data: ArrayList<ItemHome>) {
-                recyclerViewCategory = view.findViewById(R.id.RecyclerViewCategory)
-                recyclerViewCategory?.layoutManager = LinearLayoutManager(context)
-                recyclerViewCategory?.setHasFixedSize(true)
-                adapterCategory = AdapterHome(data)
-                println("Adapter Info, $adapterCategory")
-                recyclerViewCategory?.adapter = adapterCategory
-                adapterCategory.setOnItemClickListener(object: AdapterHome.OnItemClickListener{
-                    override fun onItemClick(position: Int) {
-
-                        val fragmentManager = activity?.supportFragmentManager
-                        val fragmentTransaction = fragmentManager?.beginTransaction()
-
-                        fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(data[position]))
-                        fragmentTransaction?.addToBackStack("Fragment Detail")
-                        fragmentTransaction?.commit()
-                        Toast.makeText(context,"Clicked an Item", Toast.LENGTH_SHORT).show()
-                    }
-                })
-            }
-        }
-
-        getList(callbackCategory)
-    }
-    override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
-
-        val category = FileManager(requireContext())
-        val choice = parent.getItemAtPosition(pos).toString()
-        category.writeToFile("category.txt", choice)
-
-        val callbackCategory = object : SearchCallback {
-            override fun onDataReceived(data: ArrayList<ItemHome>) {
-                recyclerViewCategory = view.findViewById(R.id.RecyclerViewCategory)
-                recyclerViewCategory?.layoutManager = LinearLayoutManager(context)
-                recyclerViewCategory?.setHasFixedSize(true)
-                adapterCategory = AdapterHome(data)
-                println("Adapter Info, $adapterCategory")
-                recyclerViewCategory?.adapter = adapterCategory
-                adapterCategory.setOnItemClickListener(object: AdapterHome.OnItemClickListener{
-                    override fun onItemClick(position: Int) {
-
-                        val fragmentManager = activity?.supportFragmentManager
-                        val fragmentTransaction = fragmentManager?.beginTransaction()
-
-                        fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(data[position]))
-                        fragmentTransaction?.addToBackStack("Fragment Detail")
-                        fragmentTransaction?.commit()
-                        Toast.makeText(context,"Clicked an Item", Toast.LENGTH_SHORT).show()
-                    }
-                })
-            }
-        }
-
-        getList(callbackCategory)
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>) {
-        // Another interface callback
-    }
-
-    fun getList(callback: SearchCallback){
-        val categoryArrayList = arrayListOf<ItemHome>()
-
-        val fileCat = FileManager(requireContext())
-        val category = fileCat.readFromFile("category.txt")
-
-        val query = "SELECT PID, Pname, Price, ImageP, Description FROM Product WHERE Category = '${category}'"
-
-        ClientNetwork.retrofit.select(query).enqueue(
-            object : Callback<JsonObject> {
-                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                    if (response.isSuccessful) {
-                        Log.v("SELECT", "Response successful")
-                        val resultSet = response.body()?.getAsJsonArray("queryset")
-                        if (resultSet != null && resultSet.size() > 0) {
-                            for (result in resultSet) {
-                                val imageCall = object : ImageCallback {
-                                    override fun onDataReceived(data: Bitmap?) {
-                                        val p = Gson().fromJson(result, ProductModel::class.java)
-                                        categoryArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price, p.description))
-                                        adapterCategory.notifyDataSetChanged()
-                                    }
-                                }
-                                getImage(result.asJsonObject, imageCall)
-                            }
-                            callback.onDataReceived(categoryArrayList)
-                        } else {
-                            Log.v("SELECT", "No tuples on Transaction table")
-                            callback.onDataReceived(categoryArrayList)
-                        }
-                    } else {
-                        callback.onDataReceived(categoryArrayList)
-                    }
-                }
-                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    callback.onDataReceived(categoryArrayList)
-                    Log.v("SELECT", "Response failed")
-                }
-            }
-        )
-    }*/
 
     private fun getImage(jsonObject: JsonObject, callback: ImageCallback) {
 

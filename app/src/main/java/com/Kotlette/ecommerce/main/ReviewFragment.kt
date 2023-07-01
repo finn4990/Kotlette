@@ -33,6 +33,7 @@ class ReviewFragment : Fragment() {
         val view = binding.root
         val data = context?.let { FileManager(it) }
 
+        // Gestisce il click sul pulsante di invio della recensione
         binding.submitButton.setOnClickListener{
             val rating = binding.ratingBar.rating
             val review = binding.reviewEditText.text.toString()
@@ -49,8 +50,10 @@ class ReviewFragment : Fragment() {
         return view
     }
 
+    // Funzione per inserire una recensione nel database
     private fun InsertReview(rating: Float, review: String, email: String?, idP: Int) {
 
+        // Query per l'inserimento della recensione nel database
         val query = "INSERT INTO Review VALUES ('${review}', '${rating}', '${email}', '${idP}')"
 
         ClientNetwork.retrofit.insert(query).enqueue(

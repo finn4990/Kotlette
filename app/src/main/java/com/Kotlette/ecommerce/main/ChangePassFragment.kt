@@ -60,15 +60,18 @@ class ChangePassFragment : Fragment() {
         val queryC = "SELECT * FROM User WHERE  Email = '${email}' AND Password = '${old_password}';"
         val query = "UPDATE User SET Password = '${new_password}' WHERE email = '${email}'; "
 
+        // Richiesta al server tramite Retrofit per verificare la corrispondenza dell'email e della vecchia password
         ClientNetwork.retrofit.select(queryC).enqueue(
             object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful) {
                         if((response.body()?.get("queryset") as JsonArray).size() == 1){
+                            // Se la vecchia password è corretta, esegue una richiesta al server per aggiornare la password
                             ClientNetwork.retrofit.update(query).enqueue(
                                 object : Callback<JsonObject> {
                                     override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                                         if(response.isSuccessful) {
+                                            // Se l'aggiornamento ha successo, mostra un messaggio di conferma
                                             Toast.makeText(requireContext(), "Password changed correctly", Toast.LENGTH_SHORT).show()
                                         }else{
                                             Log.v("UPDATE", "Error!")
