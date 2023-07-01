@@ -18,6 +18,7 @@ class AdapterDetail (private val detailList : ArrayList<ItemDetail>) :
         return ViewHolderDetail(itemView)
     }
 
+    // Restituisce il numero totale di elementi nella detailList
     override fun getItemCount(): Int {
         return detailList.size
     }

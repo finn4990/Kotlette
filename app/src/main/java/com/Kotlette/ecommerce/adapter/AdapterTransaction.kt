@@ -16,6 +16,7 @@ class AdapterTransaction (private val transactionList : ArrayList<ItemTransactio
         return ViewHolderTransaction(itemView)
     }
 
+    // Restituisce il numero totale di elementi nella trasnactionList
     override fun getItemCount(): Int {
         return transactionList.size
     }

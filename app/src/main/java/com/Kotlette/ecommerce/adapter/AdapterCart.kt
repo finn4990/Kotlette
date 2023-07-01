@@ -20,6 +20,7 @@ class AdapterCart (private val cartList : ArrayList<ItemCart>) :
         return ViewHolderCart(itemView)
     }
 
+    // Restituisce il numero totale di elementi nella lista del carrello
     override fun getItemCount(): Int {
         return cartList.size
     }
@@ -30,14 +31,20 @@ class AdapterCart (private val cartList : ArrayList<ItemCart>) :
         holder.title.text = currentItem.title
         holder.price.text = "Price: " + currentItem.price.toString()
         holder.quantity.text = "Quantity: " + currentItem.qty
+
+        // Gestisce l'azione del pulsante "Aggiungi quantità"
         holder.addQuantity.setOnClickListener{
             SingletonCart.addQuantity(position)
             notifyDataSetChanged()
         }
+
+        // Gestisce l'azione del pulsante "Rimuovi quantità"
         holder.removeQuantity.setOnClickListener{
             SingletonCart.removeQuantity(position)
             notifyDataSetChanged()
         }
+
+        // Gestisce l'azione del pulsante "Rimuovi prodotto"
         holder.removeProduct.setOnClickListener{
             SingletonCart.remFromCart(position)
             notifyDataSetChanged()

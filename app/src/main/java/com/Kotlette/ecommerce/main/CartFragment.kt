@@ -40,6 +40,8 @@ class CartFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentCartBinding.inflate(layoutInflater)
         val view = binding.root
+
+        // Gestisce il click sul pulsante di pagamento
         binding.buttonPayment.setOnClickListener{
             if(SingletonCart.getCart().size > 0) {
                 val fragmentManager = activity?.supportFragmentManager
@@ -60,10 +62,11 @@ class CartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //RecyclerViewCart
+        // Configura la RecyclerView per visualizzare gli elementi del carrello
         recyclerView = view.findViewById(R.id.recyclerViewCart)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
+        // Crea un adapter per la RecyclerView utilizzando la lista del carrello
         adapter = AdapterCart(SingletonCart.getCart())
         recyclerView.adapter = adapter
     }

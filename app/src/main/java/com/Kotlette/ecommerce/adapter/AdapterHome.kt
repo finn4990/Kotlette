@@ -12,6 +12,7 @@ import com.Kotlette.ecommerce.item.ItemHome
 class AdapterHome (private val homeList : ArrayList<ItemHome>) :
     RecyclerView.Adapter<AdapterHome.ViewHolderHome>() {
 
+    // Variabile per tenere traccia del listener per l'evento di clic sugli elementi della lista
     private lateinit var listener: OnItemClickListener
     interface OnItemClickListener{
         fun onItemClick(position: Int)
@@ -24,6 +25,7 @@ class AdapterHome (private val homeList : ArrayList<ItemHome>) :
         return ViewHolderHome(itemView, listener)
     }
 
+    // Restituisce il numero totale di elementi nella homeList
     override fun getItemCount(): Int {
         return homeList.size
     }
@@ -43,6 +45,7 @@ class AdapterHome (private val homeList : ArrayList<ItemHome>) :
 
 
         init {
+            // Imposta il listener per il click sull'elemento della lista
             itemView.setOnClickListener{
                 listener.onItemClick(adapterPosition)
             }

@@ -35,10 +35,17 @@ class ConfirmFragment : Fragment() {
     ): View? {
         binding = FragmentConfirmBinding.inflate(layoutInflater)
         val view = binding.root
+
+        // Imposta il prezzo totale nel layout
         binding.totalPrice.text = "Total: ${SingletonCart.getTotal()}"
+
+        // Gestisci il click sul pulsante di conferma transazione
         binding.confirmTransaction.setOnClickListener {
+
+            // Aggiorna i prodotti nel database
             for (element in SingletonCart.getCart())
                 updateProduct(element)
+            // Inserisce la transazione nel database
             insertTransaction()
             val fragmentManager = activity?.supportFragmentManager
             val fragmentTransaction = fragmentManager?.beginTransaction()
@@ -56,8 +63,12 @@ class ConfirmFragment : Fragment() {
     }
 
     private fun insertTransaction() {
+
+        // Ottiene l'email dal file locale
         val data = context?.let { FileManager(it) }
         val email = data?.readFromFile("Email.txt")
+
+        // Crea la query per inserire la transazione nel database
         val query = "INSERT INTO Transaction (EmailT, Value, TDate) VALUES ('${email}', '${SingletonCart.getTotal()}', '${SimpleDateFormat("yyyy-MM-dd").format(Date())}')"
 
         ClientNetwork.retrofit.insert(query).enqueue(
@@ -78,6 +89,7 @@ class ConfirmFragment : Fragment() {
     }
 
     private fun updateProduct(item: ItemCart) {
+        // Crea la query per aggiornare il prodotto nel database
         val query = "UPDATE Product SET Quantity = '${item.qtyProduct!!-item.qty}' WHERE PID = '${item.code}';"
 
         ClientNetwork.retrofit.update(query).enqueue(

@@ -11,6 +11,7 @@ import retrofit2.http.Url
 
 interface UserAPI {
 
+    // Metodi per eseguire query nel server
     @POST("postSelect/")
     @FormUrlEncoded
     fun select(@Field("query") query: String): Call <JsonObject>
