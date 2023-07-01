@@ -8,6 +8,7 @@ import com.Kotlette.ecommerce.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
 
+    // Metodo per gestire il click del pulsante di login
     private fun LoginButton(){
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -23,6 +24,8 @@ class LoginActivity : AppCompatActivity() {
             binding.Cl1?.visibility = View.INVISIBLE
 
         }
+
+        // Metodo per gestire il click del pulsante di registrazione
         binding.buttonRegister.setOnClickListener {
             val fragmentManager = supportFragmentManager
             val fragmentTransaction = fragmentManager.beginTransaction()
@@ -40,9 +43,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        LoginButton()
+        LoginButton()       // Chiamata al metodo per gestire i pulsanti di login e registrazione
 
     }
+    // Override del metodo onBackPressed per gestire il comportamento del back button
     override fun onBackPressed() {
         val fragmentManager = supportFragmentManager
         fragmentManager.popBackStack()

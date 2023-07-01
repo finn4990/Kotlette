@@ -58,12 +58,13 @@ class LoginFragment : Fragment() {
         val data = context?.let { FileManager(it) }
         val query =
             "select * from User where Email = '${email}' and Password = '${password}';"
-
+        // Richiesta al server tramite Retrofit per verificare le credenziali di accesso
         ClientNetwork.retrofit.select(query).enqueue(
             object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful) {
                         if ((response.body()?.get("queryset") as JsonArray).size() == 1) {
+                            // Se le credenziali sono corrette, salva l'email dell'utente e apri l'Activity principale
                             data?.writeToFile("Email.txt", "${email}")
                             openActivityMain()
                             Toast.makeText(requireContext(), "Successful Login", Toast.LENGTH_SHORT).show()

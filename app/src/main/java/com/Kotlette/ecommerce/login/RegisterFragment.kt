@@ -55,18 +55,21 @@ class RegisterFragment : Fragment() {
 
         val queryC = "SELECT * FROM User WHERE Email = '${email}';"
         val query = "INSERT INTO User (Email, Password, Name, Surname, PayMethod, Username) VALUES ('${email}', '${password}', '${name}', '${surname}', '${payment}', '${username}')"
-
+        // Richiesta al server tramite Retrofit per verificare se l'account esiste
         ClientNetwork.retrofit.select(queryC).enqueue(
             object : Callback<JsonObject> {
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     if (response.isSuccessful) {
                         if((response.body()?.get("queryset") as JsonArray).size() == 1){
+                            // Se l'account esiste, mostra un messaggio di errore
                             Toast.makeText(requireContext(), "Account already exists", Toast.LENGTH_SHORT).show()
                         }else{
+                            // Altrimenti, esegue una richiesta al server per inserire i dati del nuovo account nel database
                             ClientNetwork.retrofit.insert(query).enqueue(
                                object : Callback<JsonObject> {
                                    override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                                        if(response.isSuccessful) {
+                                           // Se l'inserimento ha successo, mostra un messaggio di conferma e aprire l'Activity di login
                                            Toast.makeText(requireContext(), "Account created", Toast.LENGTH_SHORT).show()
                                            openActivityLogin()
                                        }else{
