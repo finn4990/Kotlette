@@ -66,9 +66,22 @@ class DetailFragment(private val product: ItemHome) : Fragment() {
         }
 
         binding.addCart.setOnClickListener{
-            SingletonCart.addToCart(ItemCart(product.id, product.title, product.image, product.price, 1))
-            Toast.makeText(context,"Item added to the cart", Toast.LENGTH_SHORT).show()
-            SingletonCart.printCart()
+            if(product.quantity!! > 0) {
+                SingletonCart.addToCart(
+                    ItemCart(
+                        product.id,
+                        product.title,
+                        product.image,
+                        product.price,
+                        1,
+                        product.quantity
+                    )
+                )
+                Toast.makeText(context, "Item added to the cart", Toast.LENGTH_SHORT).show()
+                SingletonCart.printCart()
+            } else {
+                Toast.makeText(context, "No product available", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return view

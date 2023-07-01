@@ -6,7 +6,7 @@ object SingletonCart {
     fun addToCart(item: ItemCart) {
         for ((i, element) in cart.withIndex()) {
             if (item.code == element.code) {
-                cart[i].qty++
+                addQuantity(i)
                 return
             }
         }
@@ -18,7 +18,8 @@ object SingletonCart {
     }
 
     fun addQuantity(position: Int) {
-        cart[position].qty++
+        if(cart[position].qty < 5 && cart[position].qty < cart[position].qtyProduct!!)
+            cart[position].qty++
     }
 
     fun removeQuantity(position: Int) {
@@ -35,8 +36,15 @@ object SingletonCart {
     }
 
     fun printCart() {
-        for(i in cart)
-            println("Oggetto: title - ${i.title}, price - ${i.price}")
+        for(e in cart)
+            println("Oggetto: title - ${e.title}, price - ${e.price}")
+    }
+
+    fun getTotal() : Double {
+        var sum : Double = 0.0
+        for(e in cart)
+            sum+= e.price!!.times(e.qty)
+        return sum
     }
 
 }

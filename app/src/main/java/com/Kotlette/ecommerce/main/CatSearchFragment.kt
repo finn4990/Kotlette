@@ -104,7 +104,7 @@ class CatSearchFragment() : Fragment() {
                                 val imageCall = object : ImageCallback {
                                     override fun onDataReceived(data: Bitmap?) {
                                         val p = Gson().fromJson(result, ProductModel::class.java)
-                                        categoryArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price, p.description))
+                                        categoryArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price, p.description, p.quantity))
                                         println("CategoryArray: $categoryArrayList")
                                         adapterCategory.notifyDataSetChanged()
                                         callback.onDataReceived(categoryArrayList)

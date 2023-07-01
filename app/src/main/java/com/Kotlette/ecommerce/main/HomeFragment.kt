@@ -40,9 +40,6 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerViewAll : RecyclerView
     private lateinit var recyclerViewCategory : RecyclerView
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -63,7 +60,6 @@ class HomeFragment : Fragment() {
 
         //RecycleViewPopular
         val callbackPopular = object : HomeCallback {
-
             override fun onDataReceived(data: ArrayList<ItemHome>) {
                 recyclerViewPopular = view.findViewById(R.id.recyclerViewPopular)
                 recyclerViewPopular.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -171,12 +167,11 @@ class HomeFragment : Fragment() {
         var query = ""
 
         when (choice) {
-            1 -> query = "select PID, Pname, Price, ImageP, Description, Sale from Product ORDER BY Quantity;"
-            2 -> query = "select PID, Pname, Price, ImageP, Description, Sale from Product WHERE Sale > 0;"
-            3 -> query = "select PID, Pname, Price, ImageP, Description, Sale from Product;"
-            4 -> query = "select PID, Pname, Price, ImageP, Description, Sale from Product WHERE Category = '${category}';"
+            1 -> query = "select PID, Pname, Price, ImageP, Description, Sale, Quantity from Product ORDER BY Quantity;"
+            2 -> query = "select PID, Pname, Price, ImageP, Description, Sale, Quantity from Product WHERE Sale > 0;"
+            3 -> query = "select PID, Pname, Price, ImageP, Description, Sale, Quantity from Product;"
+            4 -> query = "select PID, Pname, Price, ImageP, Description, Sale, Quantity from Product WHERE Category = '${category}';"
         }
-
 
         ClientNetwork.retrofit.select(query).enqueue(
             object : Callback<JsonObject> {
@@ -190,7 +185,7 @@ class HomeFragment : Fragment() {
                                         val imageCall = object : ImageCallback {
                                             override fun onDataReceived(data: Bitmap?) {
                                                 val p = Gson().fromJson(resultSet[i], ProductModel::class.java)
-                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100- p.sale!!))?.div(100), p.description))
+                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100- p.sale!!))?.div(100), p.description, p.quantity))
                                                 adapterPopular.notifyDataSetChanged()
                                             }
                                         }
@@ -200,7 +195,7 @@ class HomeFragment : Fragment() {
                                         val imageCall = object : ImageCallback {
                                             override fun onDataReceived(data: Bitmap?) {
                                                 val p = Gson().fromJson(result, ProductModel::class.java)
-                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100- p.sale!!))?.div(100), p.description))
+                                                homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100- p.sale!!))?.div(100), p.description, p.quantity))
                                                 if(choice == 2)
                                                     adapterSale.notifyDataSetChanged()
                                                 if(choice == 3)
@@ -213,7 +208,7 @@ class HomeFragment : Fragment() {
                                     val imageCall = object : ImageCallback {
                                         override fun onDataReceived(data: Bitmap?) {
                                             val p = Gson().fromJson(result, ProductModel::class.java)
-                                            homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100- p.sale!!))?.div(100), p.description))
+                                            homeArrayList.add(ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100- p.sale!!))?.div(100), p.description, p.quantity))
                                             adapterCategory.notifyDataSetChanged()
                                         }
                                     }
