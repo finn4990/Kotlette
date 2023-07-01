@@ -43,10 +43,11 @@ class ConfirmFragment : Fragment() {
             val fragmentManager = activity?.supportFragmentManager
             val fragmentTransaction = fragmentManager?.beginTransaction()
 
-            fragmentTransaction?.replace(R.id.fragmentContainerView, TransactionFragment())
-            fragmentTransaction?.addToBackStack("Fragment Transaction")
+            val myFragment = TransactionFragment()
+            fragmentTransaction?.replace(R.id.fragmentContainerView, myFragment)
+            fragmentTransaction?.addToBackStack("fragment Transaction")
             fragmentTransaction?.commit()
-            Toast.makeText(context,"Payment allowed",Toast.LENGTH_SHORT).show()
+
         }
         binding.denyTransaction.setOnClickListener {
             activity?.supportFragmentManager?.popBackStack()

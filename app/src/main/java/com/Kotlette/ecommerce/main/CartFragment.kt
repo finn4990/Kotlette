@@ -41,13 +41,18 @@ class CartFragment : Fragment() {
         binding = FragmentCartBinding.inflate(layoutInflater)
         val view = binding.root
         binding.buttonPayment.setOnClickListener{
-            val fragmentManager = activity?.supportFragmentManager
-            val fragmentTransaction = fragmentManager?.beginTransaction()
+            if(SingletonCart.getCart().size > 0) {
+                val fragmentManager = activity?.supportFragmentManager
+                fragmentManager?.popBackStack()
+                val fragmentTransaction = fragmentManager?.beginTransaction()
 
-            fragmentTransaction?.replace(R.id.fragmentContainerView, ConfirmFragment())
-            fragmentTransaction?.addToBackStack("Fragment Detail")
-            fragmentTransaction?.commit()
-            Toast.makeText(context,"Payment process",Toast.LENGTH_SHORT).show()
+                fragmentTransaction?.replace(R.id.fragmentContainerView, ConfirmFragment())
+                fragmentTransaction?.addToBackStack("Fragment Detail")
+                fragmentTransaction?.commit()
+                Toast.makeText(context, "Payment process", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Cart is empty", Toast.LENGTH_SHORT).show()
+            }
         }
         return view
     }
