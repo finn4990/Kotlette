@@ -86,20 +86,23 @@ class SearchFragment : Fragment(){
                     if (response.isSuccessful) {
                         if ((response.body()?.get("queryset") as JsonArray).size() == 1) {
                             val result = response.body()?.getAsJsonArray("queryset")
-                            val imageCall = object : HomeFragment.ImageCallback {
+                            val imageCall = object : ImageCallback {
                                 override fun onDataReceived(data: Bitmap?) {
-                                    val p = Gson().fromJson(result, ProductModel::class.java)
-                                    val product = ItemHome(p.code?.toInt(), p.name, data, p.price, p.description)
-
-                                    val fragmentManager = activity?.supportFragmentManager
-                                    val fragmentTransaction = fragmentManager?.beginTransaction()
-
-                                    fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(product))
-                                    fragmentTransaction?.addToBackStack("Fragment Detail")
-                                    fragmentTransaction?.commit()
+                                    val productCall = object : SearchCallback {
+                                        override fun onDataReceived(product: ItemHome) {
+                                            val fragmentManager = activity?.supportFragmentManager
+                                            val fragmentTransaction = fragmentManager?.beginTransaction()
+                                            fragmentTransaction?.replace(R.id.fragmentContainerView, DetailFragment(product))
+                                            fragmentTransaction?.addToBackStack("Fragment Detail")
+                                            fragmentTransaction?.commit()
+                                        }
+                                    }
+                                    val p = Gson().fromJson(result!![0], ProductModel::class.java)
+                                    val productSearched = ItemHome(p.code?.toInt(), p.name, data, p.price, p.description)
+                                    productCall.onDataReceived(productSearched)
                                 }
                             }
-
+                            getImage(result!![0].asJsonObject, imageCall)
                         } else {
                             Toast.makeText(requireContext(), "Wrong product name", Toast.LENGTH_SHORT).show()
                         }
@@ -253,7 +256,7 @@ class SearchFragment : Fragment(){
     }
 
     interface SearchCallback {
-        fun onDataReceived(data: ArrayList<ItemHome>)
+        fun onDataReceived(data: ItemHome)
     }
 
     interface ImageCallback {
