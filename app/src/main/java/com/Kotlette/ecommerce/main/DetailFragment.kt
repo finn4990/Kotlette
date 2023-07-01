@@ -94,7 +94,7 @@ class DetailFragment(private val product: ItemHome) : Fragment() {
         val callback2 = object : DetailCallback {
             override fun onDataReceived(data: ArrayList<ItemDetail>) {
                 recyclerView = view.findViewById(R.id.recyclerViewCart)
-                recyclerView.layoutManager = LinearLayoutManager(context)
+                recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 recyclerView.setHasFixedSize(true)
                 adapter = AdapterDetail(data)
                 recyclerView.adapter = adapter
