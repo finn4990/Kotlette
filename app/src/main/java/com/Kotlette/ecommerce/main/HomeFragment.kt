@@ -152,13 +152,14 @@ class HomeFragment : Fragment() {
 
         }
 
-        getProduct(callbackPopular, 1)
-        getProduct(callbackSale, 2)
-        getProduct(callbackAll, 3)
-        getProduct(callbackCategory, 4)
+        getProduct(callbackPopular, 1)  //Esegue la ricerca dei prodotti più acquistati
+        getProduct(callbackSale, 2)     //Esegue la ricerca dei prodotti scontati
+        getProduct(callbackAll, 3)      //Esegue la ricerca di tutti i prodotti presenti sul negozio
+        getProduct(callbackCategory, 4) //Esegue la ricerca dei prodotti della categoria preferita dall'utente
 
     }
 
+    //Metodo per eseguire la ricerca dei prodotti da caricare nelle recycleView
     private fun getProduct(callback: HomeCallback, choice: Int) {
 
         val data = context?.let { FileManager(it) }
@@ -233,6 +234,7 @@ class HomeFragment : Fragment() {
         )
     }
 
+    //Metodo per recuperare l'immagine del prodotto
     private fun getImage(jsonObject: JsonObject, callback: ImageCallback) {
 
         val url: String = jsonObject.get("ImageP").asString
@@ -263,6 +265,7 @@ class HomeFragment : Fragment() {
         )
     }
 
+    //Interfacce per la sincronizzazione
     interface HomeCallback {
         fun onDataReceived(data: ArrayList<ItemHome>)
     }

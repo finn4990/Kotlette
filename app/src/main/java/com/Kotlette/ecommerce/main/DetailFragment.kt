@@ -54,6 +54,7 @@ class DetailFragment(private val product: ItemHome) : Fragment() {
         binding.priceProduct.text = "Prezzo: " + product?.price.toString() + "€"
         binding.description.text = product?.description
 
+        //Gestisce il passaggio al fragment per commentare il prodotto
         binding.buttonRate.setOnClickListener{
             data?.writeToFile("Id.txt", "${product?.id}")
             val fragmentManager = activity?.supportFragmentManager
@@ -65,6 +66,7 @@ class DetailFragment(private val product: ItemHome) : Fragment() {
             fragmentTransaction?.commit()
         }
 
+        //Gestisce il pulsante per aggiungere al carrello il prodotto
         binding.addCart.setOnClickListener{
             if(product.quantity!! > 0) {
                 SingletonCart.addToCart(
@@ -107,6 +109,7 @@ class DetailFragment(private val product: ItemHome) : Fragment() {
 
     }
 
+    //Metodo per il recupero dei commenti del prodotto in dettaglio e per il recupero dell'immagine
     private fun getProduct(callback: DetailCallback, choice: Int, id: Int?) {
 
         val detailArrayList = arrayListOf<ItemDetail>()
@@ -158,6 +161,7 @@ class DetailFragment(private val product: ItemHome) : Fragment() {
 
     }
 
+    //Metodo per recuperare l'immagine del prodotto
     private fun getImage(jsonObject: JsonObject?, callback: ImageCallback) {
 
         val url: String? = jsonObject?.get("ImageP")?.asString
@@ -193,6 +197,7 @@ class DetailFragment(private val product: ItemHome) : Fragment() {
         }
     }
 
+    //Interfacce per la sincronizzazione
     interface ImageCallback {
         fun onDataReceived(data: Bitmap?)
     }

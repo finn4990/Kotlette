@@ -59,6 +59,7 @@ class TransactionFragment : Fragment() {
         getPayments(callback)
     }
 
+    //Metodo per recuperare le transazioni eseguite dall'utente
     private fun getPayments(callback: TransactionCallback) {
 
         val data = context?.let { FileManager(it) }
@@ -98,6 +99,7 @@ class TransactionFragment : Fragment() {
         )
     }
 
+    //Interfaccia per la sincronizzazione
     interface TransactionCallback {
         fun onDataReceived(data: ArrayList<ItemTransaction>)
     }

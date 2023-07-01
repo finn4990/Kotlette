@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //Carica il primo fragment
         replaceFragment(HomeFragment())
     }
 
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    //Metodo di interazione con il menu di navigazione
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.search -> replaceFragment(SearchFragment())
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    //Metodo per aggiornare il contenuto del FragmentContainerView
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
