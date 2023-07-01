@@ -19,8 +19,8 @@ data class ProductModel(
     @SerializedName("Description")
     val description: String?,
 
-    @SerializedName("Value")
-    val quantity: String?,
+    @SerializedName("Quantity")
+    val quantity: Int?,
 
     @SerializedName("Price")
     val price: Double?,

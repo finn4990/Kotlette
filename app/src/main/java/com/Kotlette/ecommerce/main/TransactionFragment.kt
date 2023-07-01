@@ -100,7 +100,6 @@ class TransactionFragment : Fragment() {
 
     interface TransactionCallback {
         fun onDataReceived(data: ArrayList<ItemTransaction>)
-
     }
 
 }

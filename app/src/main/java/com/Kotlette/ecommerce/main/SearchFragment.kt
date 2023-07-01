@@ -98,7 +98,7 @@ class SearchFragment : Fragment(){
                                         }
                                     }
                                     val p = Gson().fromJson(result!![0], ProductModel::class.java)
-                                    val productSearched = ItemHome(p.code?.toInt(), p.name, data, p.price, p.description)
+                                    val productSearched = ItemHome(p.code?.toInt(), p.name, data, p.price?.times((100- p.sale!!))?.div(100), p.description, p.quantity)
                                     productCall.onDataReceived(productSearched)
                                 }
                             }

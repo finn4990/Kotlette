@@ -30,4 +30,7 @@
     <string name="Search">Search product name</string>
     <string name="Submit">Submit</string>
     <string name="Transaction">Your transaction</string>
+    <string name="PayMessage">You will pay</string>
+    <string name="Confirm">Confirm</string>
+    <string name="Deny">Deny</string>
 </resources>

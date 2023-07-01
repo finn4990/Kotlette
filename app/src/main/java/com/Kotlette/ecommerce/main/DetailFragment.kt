@@ -66,9 +66,22 @@ class DetailFragment(private val product: ItemHome) : Fragment() {
         }
 
         binding.addCart.setOnClickListener{
-            SingletonCart.addToCart(ItemCart(product.id, product.title, product.image, product.price, 1))
-            Toast.makeText(context,"Item added to the cart", Toast.LENGTH_SHORT).show()
-            SingletonCart.printCart()
+            if(product.quantity!! > 0) {
+                SingletonCart.addToCart(
+                    ItemCart(
+                        product.id,
+                        product.title,
+                        product.image,
+                        product.price,
+                        1,
+                        product.quantity
+                    )
+                )
+                Toast.makeText(context, "Item added to the cart", Toast.LENGTH_SHORT).show()
+                SingletonCart.printCart()
+            } else {
+                Toast.makeText(context, "No product available", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return view
@@ -81,7 +94,7 @@ class DetailFragment(private val product: ItemHome) : Fragment() {
         val callback2 = object : DetailCallback {
             override fun onDataReceived(data: ArrayList<ItemDetail>) {
                 recyclerView = view.findViewById(R.id.recyclerViewCart)
-                recyclerView.layoutManager = LinearLayoutManager(context)
+                recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 recyclerView.setHasFixedSize(true)
                 adapter = AdapterDetail(data)
                 recyclerView.adapter = adapter
